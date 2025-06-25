@@ -20,12 +20,23 @@ elseif(MSVC)
 endif()
 
 add_library(lich STATIC
-	source/lich/app.cpp)
+	source/lich/app.cpp
+	source/lich/log.cpp)
 
 target_include_directories(lich
 	PUBLIC source
 	PRIVATE source/lich)
 
 target_precompile_headers(lich PUBLIC source/lich/pch.hpp)
+
+add_subdirectory(vendor/spdlog)
+target_compile_definitions(spdlog PRIVATE
+	SPDLOG_COMPILED_LIB=1
+	SPDLOG_LEVEL_NAMES={\"TRACE\",\"DEBUG\",\"INFO\",\"WARN\",\"ERROR\",\"FATAL\",\"OFF\"}
+	SPDLOG_SHORT_LEVEL_NAMES={\"T\",\"D\",\"I\",\"W\",\"E\",\"F\",\"O\"}
+	SPDLOG_DISABLE_DEFAULT_LOGGER=1)
+
+target_link_libraries(lich PUBLIC
+	spdlog)
 
 add_subdirectory(sandbox)

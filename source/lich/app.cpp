@@ -2,8 +2,9 @@
 
 namespace lich {
 
-App::App(const App_Spec &app_spec, const Console_Args &console_args)
-	: _app_spec{app_spec}, _console_args{console_args}, _success{false}, _running{false} {
+App::App(const App_Spec &app_spec, const Console_Args &console_args):
+	_app_spec{app_spec}, _console_args{console_args},
+	_success{false}, _running{false} {
 	
 	_success = true;
 }

@@ -2,14 +2,15 @@
 
 namespace sand {
 
-Game::Game(const lich::Console_Args &console_args)
-	: App{lich::App_Spec{"Sandbox", 800, 600}, console_args} {
+Game::Game(const lich::Console_Args &console_args):
+	App{lich::App_Spec{"Sandbox", 800, 600}, console_args},
+	_logger{"sand::Game"} {
 
-	std::cout << "Hello!\n";
+	_logger.trace("Hello!");
 }
 
 Game::~Game(void) {
-	std::cout << "Goodbye!\n";
+	_logger.trace("Goodbye!");
 }
 
 }
