@@ -25,6 +25,8 @@ target_include_directories(lich
 
 target_precompile_headers(lich PUBLIC source/lich/pch.hpp)
 
+target_compile_definitions(lich PRIVATE LICH_COMPILE_STEP=1)
+
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 	target_compile_options(lich PRIVATE -Wall -Wextra -Wpedantic)
 elseif(MSVC)

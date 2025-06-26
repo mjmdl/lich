@@ -15,7 +15,7 @@ enum class Log_Level {
 	Fatal = spdlog::level::critical,
 };
 
-#define GEN_METHOD(INT, IMPL) \
+#define GEN_MEMBER_FUNCTION(INT, IMPL) \
 	template<typename ...Args> \
 	void INT(spdlog::format_string_t<Args...> format, Args &&...args) { \
 		_logger->IMPL(std::move(format), std::forward<Args>(args)...); \
@@ -23,24 +23,66 @@ enum class Log_Level {
 
 class Logger {
 public:
+	static Logger engine_logger;
+	static Logger client_logger;
+
 	Logger(const std::string &name = "Logger",
 		Log_Level level = Log_Level::Trace);
 	const std::string &name(void) const;
 	Log_Level level(void) const;
 	void set_level(Log_Level level);
 
-	GEN_METHOD(trace, trace)
-	GEN_METHOD(debug, debug)
-	GEN_METHOD(info, info)
-	GEN_METHOD(warn, warn)
-	GEN_METHOD(error, error)
-	GEN_METHOD(fatal, critical)
+	GEN_MEMBER_FUNCTION(trace, trace)
+	GEN_MEMBER_FUNCTION(debug, debug)
+	GEN_MEMBER_FUNCTION(info, info)
+	GEN_MEMBER_FUNCTION(warn, warn)
+	GEN_MEMBER_FUNCTION(error, error)
+	GEN_MEMBER_FUNCTION(fatal, critical)
 	
 private:
 	std::unique_ptr<spdlog::logger> _logger;
 };
 
-#undef GEN_METHOD
+#ifdef LICH_COMPILE_STEP
+#   define SELECTED_LOGGER Logger::engine_logger
+#else
+#   define SELECTED_LOGGER Logger::client_logger
+#endif
+
+#define GEN_FUNCTION(NAME) \
+	template<typename ...Args> \
+	inline void log_##NAME(spdlog::format_string_t<Args...> format, Args &&...args) { \
+		SELECTED_LOGGER.NAME(std::move(format), std::forward<Args>(args)...); \
+	}
+
+GEN_FUNCTION(trace)
+GEN_FUNCTION(debug)
+GEN_FUNCTION(info)
+GEN_FUNCTION(warn)
+GEN_FUNCTION(error)
+GEN_FUNCTION(fatal)
+
+#define LICH_ASSERT(EXPRESSION, ...) \
+	do { \
+		if (not (EXPRESSION)) { \
+			lich::log_fatal("Assertion failure at {}:{}: {}", \
+				__FILE__, __LINE__, #EXPRESSION); \
+			lich::log_fatal(__VA_ARGS__); \
+			std::exit(EXIT_FAILURE); \
+		} \
+	} while (0)
+#define LICH_EXPECT(EXPRESSION, ...) \
+	do { \
+		if (not (EXPRESSION)) { \
+			lich::log_error("Unexpected failure at {}:{}: {}", \
+				__FILE__, __LINE__, #EXPRESSION); \
+			lich::log_error(__VA_ARGS__); \
+		} \
+	} while (0)
+
+#undef GEN_FUNCTION
+#undef SELECTED_LOGGER
+#undef GEN_MEMBER_FUNCTION
 
 }
 

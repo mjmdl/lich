@@ -4,6 +4,9 @@
 
 namespace lich {
 
+Logger Logger::engine_logger{"Lich"};
+Logger Logger::client_logger{"Game"};
+
 inline static spdlog::level::level_enum to_spdlog_level_(Log_Level level) {
 	return static_cast<spdlog::level::level_enum>(level);
 }

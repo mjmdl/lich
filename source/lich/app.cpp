@@ -2,12 +2,17 @@
 
 #include "app.hpp"
 #include "debug_render.hpp"
+#include "log.hpp"
 
 namespace lich {
 
 App::App(const App_Spec &app_spec, const Console_Args &console_args):
 	_app_spec{app_spec}, _console_args{console_args},
 	_window{nullptr}, _success{false}, _running{false} {
+
+	if (_app_spec.name != "Lich Engine") {
+		Logger::client_logger = Logger{_app_spec.name};
+	}
 
 	_window = Window::create(Window_Spec{
 		app_spec.name, app_spec.width, app_spec.height});
