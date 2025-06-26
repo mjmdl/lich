@@ -35,6 +35,7 @@ add_subdirectory(vendor)
 target_link_libraries(lich PUBLIC
 	glad
 	glfw
+	glm
 	imgui
 	spdlog)
 
