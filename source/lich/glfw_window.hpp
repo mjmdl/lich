@@ -25,6 +25,7 @@ public:
 	bool focused(void) const override;
 	void set_focused(bool focused) override;
 
+	void *handle(void) const override;
 	const std::string &title(void) const override;
 	void set_title(const std::string &title) override;
 	std::pair<I32, I32> pos(void) const override;

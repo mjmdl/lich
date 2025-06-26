@@ -1,4 +1,7 @@
+#include <imgui/imgui.h>
+
 #include "app.hpp"
+#include "debug_render.hpp"
 
 namespace lich {
 
@@ -23,11 +26,21 @@ int App::run(void) {
 		return EXIT_FAILURE;
 	}
 
+	debug_render::bootstrap(_window->handle());
+	bool show_demo_window = true;
+	
 	_running = true;
 	while (_running) {
 		_window->update();
 
 		_window->clear();
+
+		debug_render::begin();
+		if (show_demo_window) {
+			ImGui::ShowDemoWindow(&show_demo_window);
+		}
+		debug_render::end();
+		
 		_window->present();
 	}
 	

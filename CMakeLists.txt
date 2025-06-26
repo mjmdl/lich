@@ -16,6 +16,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 add_library(lich STATIC
 	source/lich/app.cpp
 	source/lich/glfw_window.cpp
+	source/lich/imgui_debug_render.cpp
 	source/lich/log.cpp)
 
 target_include_directories(lich
@@ -30,19 +31,11 @@ elseif(MSVC)
 	target_compile_options(lich PRIVATE /W4)
 endif()
 
-add_subdirectory(vendor/glad)
-add_subdirectory(vendor/glfw)
-
-add_subdirectory(vendor/spdlog)
-target_compile_definitions(spdlog PRIVATE
-	SPDLOG_COMPILED_LIB=1
-	SPDLOG_LEVEL_NAMES={\"TRACE\",\"DEBUG\",\"INFO\",\"WARN\",\"ERROR\",\"FATAL\",\"OFF\"}
-	SPDLOG_SHORT_LEVEL_NAMES={\"T\",\"D\",\"I\",\"W\",\"E\",\"F\",\"O\"}
-	SPDLOG_DISABLE_DEFAULT_LOGGER=1)
-
+add_subdirectory(vendor)
 target_link_libraries(lich PUBLIC
 	glad
 	glfw
+	imgui
 	spdlog)
 
 add_subdirectory(sandbox)

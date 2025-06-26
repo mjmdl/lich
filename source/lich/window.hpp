@@ -29,6 +29,7 @@ public:
 	virtual bool focused(void) const = 0;
 	virtual void set_focused(bool focused) = 0;
 
+	virtual void *handle(void) const = 0;
 	virtual const std::string &title(void) const = 0;
 	virtual void set_title(const std::string &title) = 0;
 	virtual std::pair<I32, I32> pos(void) const = 0;

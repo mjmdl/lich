@@ -115,6 +115,10 @@ void Glfw_Window::set_focused(bool focused) {
 	}
 }
 
+void *Glfw_Window::handle(void) const {
+	return _window;
+}
+
 const std::string &Glfw_Window::title(void) const {
 	return _title;
 }
