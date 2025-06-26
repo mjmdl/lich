@@ -1,6 +1,8 @@
 #ifndef LICH_APP_HPP
 #define LICH_APP_HPP
 
+#include "window.hpp"
+
 namespace lich {
 
 struct App_Spec {
@@ -24,10 +26,14 @@ public:
 	const Console_Args &console_args(void) const;
 	bool success(void) const;
 	bool running(void) const;
+
+private:
+	void _on_window_close(Window &window);
 	
 private:
 	App_Spec _app_spec;
 	Console_Args _console_args;
+	std::unique_ptr<Window> _window;
 	bool _success;
 	bool _running;
 };

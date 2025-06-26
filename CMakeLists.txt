@@ -13,14 +13,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-	add_compile_options(-Wall -Wextra -Wpedantic)
-elseif(MSVC)
-	add_compile_options(/W4)
-endif()
-
 add_library(lich STATIC
 	source/lich/app.cpp
+	source/lich/glfw_window.cpp
 	source/lich/log.cpp)
 
 target_include_directories(lich
@@ -28,6 +23,15 @@ target_include_directories(lich
 	PRIVATE source/lich)
 
 target_precompile_headers(lich PUBLIC source/lich/pch.hpp)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+	target_compile_options(lich PRIVATE -Wall -Wextra -Wpedantic)
+elseif(MSVC)
+	target_compile_options(lich PRIVATE /W4)
+endif()
+
+add_subdirectory(vendor/glad)
+add_subdirectory(vendor/glfw)
 
 add_subdirectory(vendor/spdlog)
 target_compile_definitions(spdlog PRIVATE
@@ -37,6 +41,8 @@ target_compile_definitions(spdlog PRIVATE
 	SPDLOG_DISABLE_DEFAULT_LOGGER=1)
 
 target_link_libraries(lich PUBLIC
+	glad
+	glfw
 	spdlog)
 
 add_subdirectory(sandbox)

@@ -4,19 +4,31 @@ namespace lich {
 
 App::App(const App_Spec &app_spec, const Console_Args &console_args):
 	_app_spec{app_spec}, _console_args{console_args},
-	_success{false}, _running{false} {
+	_window{nullptr}, _success{false}, _running{false} {
+
+	_window = Window::create(Window_Spec{
+		app_spec.name, app_spec.width, app_spec.height});
+	if (not _window->success()) {
+		return;
+	}
+	_window->set_close_callback(std::bind(&App::_on_window_close, this, std::placeholders::_1));
+	_window->move_to_center();
+	_window->set_visible(true);
 	
 	_success = true;
 }
 
 int App::run(void) {
-	if (!_success) {
+	if (not _success) {
 		return EXIT_FAILURE;
 	}
 
 	_running = true;
 	while (_running) {
-		break;
+		_window->update();
+
+		_window->clear();
+		_window->present();
 	}
 	
 	return EXIT_SUCCESS;
@@ -36,6 +48,11 @@ bool App::success(void) const {
 
 bool App::running(void) const {
 	return _running;
+}
+
+void App::_on_window_close(Window &window) {
+	(void)window;
+	_running = false;
 }
 
 }
