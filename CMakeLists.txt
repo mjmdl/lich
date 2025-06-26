@@ -37,6 +37,7 @@ target_link_libraries(lich PUBLIC
 	glfw
 	glm
 	imgui
-	spdlog)
+	spdlog
+	stb)
 
 add_subdirectory(sandbox)

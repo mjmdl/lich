@@ -3,6 +3,7 @@ add_subdirectory(glfw)
 add_subdirectory(glm)
 add_subdirectory(imgui)
 add_subdirectory(spdlog)
+add_subdirectory(stb)
 
 target_compile_definitions(spdlog PRIVATE
 	SPDLOG_COMPILED_LIB=1
