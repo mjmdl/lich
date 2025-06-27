@@ -40,6 +40,7 @@ int App::run(void) {
 	_running = true;
 	while (_running) {
 		_window->update();
+		_layer_stack.update();
 
 		_window->clear();
 
@@ -53,6 +54,14 @@ int App::run(void) {
 	}
 	
 	return EXIT_SUCCESS;
+}
+
+Usize App::push_layer(std::unique_ptr<Layer> layer) {
+	return _layer_stack.push(std::move(layer));
+}
+
+Usize App::push_overlay(std::unique_ptr<Layer> overlay) {
+	return _layer_stack.push_over(std::move(overlay));
 }
 
 const App_Spec &App::app_spec(void) const {
@@ -73,8 +82,10 @@ bool App::running(void) const {
 
 bool App::_on_window_event(Window &window, Event &event) {
 	(void)window;
+
+	_layer_stack.handle(event);
+
 	Event_Dispatcher dispatcher{event};
-	
 	return dispatcher.handle<Window_Close_Event>([this] (const auto &) -> bool {
 		_running = false;
 		return true;

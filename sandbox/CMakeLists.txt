@@ -6,6 +6,7 @@ project(sandbox
 	LANGUAGES CXX)
 
 add_executable(sandbox
+	source/events_logger_layer.cpp
 	source/game.cpp
 	source/main.cpp)
 

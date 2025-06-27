@@ -11,6 +11,7 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <ranges>
 #include <sstream>
 #include <string>
 #include <string_view>

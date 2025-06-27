@@ -17,6 +17,7 @@ add_library(lich STATIC
 	source/lich/app.cpp
 	source/lich/glfw_window.cpp
 	source/lich/imgui_debug_render.cpp
+	source/lich/layer.cpp
 	source/lich/log.cpp)
 
 target_include_directories(lich
