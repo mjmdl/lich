@@ -4,6 +4,14 @@
 
 namespace lich {
 
+static Key_Code to_our_key_code_(int glfw_key_code) {
+	return static_cast<Key_Code>(glfw_key_code);
+}
+
+static Mouse_Code to_our_mouse_code_(int glfw_mouse_code) {
+	return static_cast<Mouse_Code>(glfw_mouse_code);
+}
+
 std::unique_ptr<Window> Window::create(const Window_Spec &window_spec) {
 	return std::make_unique<Glfw_Window>(window_spec);
 }
@@ -13,7 +21,7 @@ void Glfw_Window::glfw_error_callback_(int error, const char *description) {
 }
 
 Glfw_Window::Glfw_Window(const Window_Spec &window_spec):
-	_window{NULL}, _title{window_spec.title}, _close_callback{},
+	_window{NULL}, _title{window_spec.title}, _event_callback{},
 	_success{false} {
 
 	if (not glfw_init_) {
@@ -159,15 +167,110 @@ std::pair<U32, U32> Glfw_Window::screen_size(void) const {
 	return {static_cast<U32>(mode->width), static_cast<U32>(mode->height)};
 }
 
-void Glfw_Window::set_close_callback(const Close_Callback &callback) {
-	_close_callback = callback;
-	glfwSetWindowCloseCallback(_window, [](GLFWwindow *window) -> void {
-		void *user_pointer = glfwGetWindowUserPointer(window);
-		assert(user_pointer != NULL);
-		auto self = reinterpret_cast<Glfw_Window *>(user_pointer);
-		assert(self->_close_callback != nullptr);
-		self->_close_callback(*self);
-	});
+Glfw_Window *Glfw_Window::window_self_(GLFWwindow *handle) {
+	void *user_pointer = glfwGetWindowUserPointer(handle);
+	LICH_ASSERT(user_pointer != NULL, "GLFW Window user pointer is not set.");
+	auto self = reinterpret_cast<Glfw_Window *>(user_pointer);
+	LICH_ASSERT(self->_event_callback != nullptr, "The event callback is not set.");
+	return self;
+}
+
+void Glfw_Window::set_event_callback(const Event_Callback &callback) {
+	_event_callback = callback;
+	glfwSetWindowCloseCallback(_window, glfw_close_callback_);
+	glfwSetWindowFocusCallback(_window, glfw_focus_callback_);
+	glfwSetWindowPosCallback(_window, glfw_pos_callback_);
+	glfwSetWindowSizeCallback(_window, glfw_size_callback_);
+	glfwSetKeyCallback(_window, glfw_key_callback_);
+	glfwSetMouseButtonCallback(_window, glfw_mouse_button_callback_);
+	glfwSetCursorPosCallback(_window, glfw_cursor_pos_callback_);
+	glfwSetScrollCallback(_window, glfw_scroll_callback_);
+}
+
+void Glfw_Window::glfw_close_callback_(GLFWwindow *window) {
+	auto self = window_self_(window);
+	Window_Close_Event event;
+	self->_event_callback(*self, event);
+}
+
+void Glfw_Window::glfw_focus_callback_(GLFWwindow *window, int focused) {
+	auto self = window_self_(window);
+	if (focused == GLFW_TRUE) {
+		Window_Focus_Event event;
+		self->_event_callback(*self, event);
+	} else {
+		Window_Blur_Event event;
+		self->_event_callback(*self, event);
+	}
+}
+
+void Glfw_Window::glfw_pos_callback_(GLFWwindow *window, int xpos, int ypos) {
+	auto self = window_self_(window);
+	Window_Move_Event event{xpos, ypos};
+	self->_event_callback(*self, event);
+}
+
+void Glfw_Window::glfw_size_callback_(GLFWwindow *window, int width, int height) {
+	auto self = window_self_(window);
+	Window_Size_Event event{width, height};
+	self->_event_callback(*self, event);
+}
+
+void Glfw_Window::glfw_key_callback_(GLFWwindow *window, int key, int scancode,
+	int action, int mods) {
+
+	(void)scancode;
+	(void)mods;
+
+	auto self = window_self_(window);
+	if (action == GLFW_RELEASE) {
+		Key_Release_Event event{to_our_key_code_(key)};
+		self->_event_callback(*self, event);
+	} else if (action == GLFW_PRESS) {
+		Key_Press_Event event{to_our_key_code_(key), 0};
+		self->_event_callback(*self, event);
+	} else if (action == GLFW_REPEAT) {
+		Key_Press_Event event{to_our_key_code_(key), 1};
+		self->_event_callback(*self, event);
+	} else {
+		log_warn("Unknown GLFW window key action: {}", action);
+	}
+}
+
+void Glfw_Window::glfw_mouse_button_callback_(GLFWwindow *window, int button,
+	int action, int mods) {
+
+	(void)mods;
+
+	auto self = window_self_(window);
+	if (action == GLFW_RELEASE) {
+		Mouse_Release_Event event{to_our_mouse_code_(button)};
+		self->_event_callback(*self, event);
+	} else if (action == GLFW_PRESS) {
+		Mouse_Press_Event event{to_our_mouse_code_(button), 0};
+		self->_event_callback(*self, event);
+	} else if (action == GLFW_REPEAT) {
+		Mouse_Press_Event event{to_our_mouse_code_(button), 1};
+		self->_event_callback(*self, event);
+	} else {
+		log_warn("Unknown GLFW window key action: {}", action);
+	}
+}
+
+void Glfw_Window::glfw_cursor_pos_callback_(GLFWwindow *window,
+	double xpos, double ypos) {
+
+	auto self = window_self_(window);
+	Mouse_Move_Event event{xpos, ypos};
+	self->_event_callback(*self, event);
+}
+
+void Glfw_Window::glfw_scroll_callback_(GLFWwindow *window,
+	double xoffset, double yoffset) {
+
+	auto self = window_self_(window);
+	Mouse_Scroll_Event event{xoffset, yoffset};
+	self->_event_callback(*self, event);
 }
 
 void Glfw_Window::move_to_center(void) {

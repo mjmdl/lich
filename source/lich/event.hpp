@@ -65,7 +65,7 @@ struct Event_Dispatcher {
 	Event_Dispatcher(Event &event): event{event} {}
 
 	template<Event_Derived Type>
-	bool dispatch(Callback<Type> callback) {
+	bool handle(Callback<Type> callback) {
 		if (event.variant() == Type::static_variant()) {
 			event.handled = callback(static_cast<Type &>(event));
 			return true;

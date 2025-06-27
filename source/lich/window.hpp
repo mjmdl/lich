@@ -1,6 +1,8 @@
 #ifndef LICH_WINDOW_HPP
 #define LICH_WINDOW_HPP
 
+#include "event.hpp"
+
 namespace lich {
 
 struct Window_Spec {
@@ -12,7 +14,7 @@ struct Window_Spec {
 
 class Window {
 public:
-	using Close_Callback = std::function<void(Window &self)>;
+	using Event_Callback = std::function<bool(Window &self, Event &event)>;
 	
 	static std::unique_ptr<Window> create(const Window_Spec &window_spec = {});
 
@@ -38,7 +40,7 @@ public:
 	virtual void set_size(U32 width, U32 height) = 0;
 	virtual std::pair<U32, U32> screen_size(void) const = 0;
 
-	virtual void set_close_callback(const Close_Callback &callback) = 0;
+	virtual void set_event_callback(const Event_Callback &callback) = 0;
 	virtual void move_to_center(void) = 0;
 };
 

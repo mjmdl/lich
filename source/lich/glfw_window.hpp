@@ -34,11 +34,25 @@ public:
 	void set_size(U32 width, U32 height) override;
 	std::pair<U32, U32> screen_size(void) const override;
 
-	void set_close_callback(const Close_Callback &callback) override;
+	void set_event_callback(const Event_Callback &callback) override;
 	void move_to_center(void) override;
 
 private:
 	static void glfw_error_callback_(int error, const char *description);
+	static Glfw_Window *window_self_(GLFWwindow *handle);
+
+	static void glfw_close_callback_(GLFWwindow *window);
+	static void glfw_focus_callback_(GLFWwindow *window, int focused);
+	static void glfw_pos_callback_(GLFWwindow *window, int xpos, int ypos);
+	static void glfw_size_callback_(GLFWwindow *window, int width, int height);
+	static void glfw_key_callback_(GLFWwindow *window, int key, int scancode,
+		int action, int mods);
+	static void glfw_mouse_button_callback_(GLFWwindow *window, int button,
+		int action, int mods);
+	static void glfw_cursor_pos_callback_(GLFWwindow *window,
+		double xpos, double ypos);
+	static void glfw_scroll_callback_(GLFWwindow *window,
+		double xoffset, double yoffset);
 	
 private:
 	inline static bool glfw_init_ = false;
@@ -47,7 +61,7 @@ private:
 	
 	GLFWwindow *_window;
 	std::string _title;
-	Close_Callback _close_callback;
+	Event_Callback _event_callback;
 	bool _success;
 };
 

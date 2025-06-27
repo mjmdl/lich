@@ -28,7 +28,7 @@ public:
 	bool running(void) const;
 
 private:
-	void _on_window_close(Window &window);
+	bool _on_window_event(Window &window, Event &event);
 	
 private:
 	App_Spec _app_spec;

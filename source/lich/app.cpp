@@ -19,7 +19,10 @@ App::App(const App_Spec &app_spec, const Console_Args &console_args):
 	if (not _window->success()) {
 		return;
 	}
-	_window->set_close_callback(std::bind(&App::_on_window_close, this, std::placeholders::_1));
+	_window->set_event_callback(std::bind(&App::_on_window_event, this,
+		std::placeholders::_1, // Window &self
+		std::placeholders::_2 // Event &event
+		));
 	_window->move_to_center();
 	_window->set_visible(true);
 	
@@ -68,9 +71,14 @@ bool App::running(void) const {
 	return _running;
 }
 
-void App::_on_window_close(Window &window) {
+bool App::_on_window_event(Window &window, Event &event) {
 	(void)window;
-	_running = false;
+	Event_Dispatcher dispatcher{event};
+	
+	return dispatcher.handle<Window_Close_Event>([this] (const auto &) -> bool {
+		_running = false;
+		return true;
+	});
 }
 
 }
