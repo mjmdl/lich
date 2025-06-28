@@ -35,7 +35,7 @@ int App::run(void) {
 	while (_running) {
 		_window->update();
 		_window->clear();
-
+		
 		_layer_stack.update();
 		
 		_window->present();

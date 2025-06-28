@@ -1,15 +1,9 @@
 #ifndef LICH_EVENT_HPP
 #define LICH_EVENT_HPP
 
+#include "input.hpp"
+
 namespace lich {
-
-enum class Key_Code {
-	None = 0,
-};
-
-enum class Mouse_Code {
-	None = 0,
-};
 
 enum class Event_Variant {
 	None = 0,

@@ -3,6 +3,7 @@
 #include <imgui/backends/imgui_impl_opengl3.h>
 
 #include "imgui.hpp"
+#include "input.hpp"
 #include "log.hpp"
 
 namespace lich {
@@ -48,7 +49,7 @@ void Imgui_Layer::update(void) {
 
 void Imgui_Layer::handle(Event &event) {
 	 Event_Dispatcher{event}.handle<Key_Press_Event>([this] (const auto &event) -> bool {
-		if ((U32)event.code == 294) {
+		 if (event.code == Key_Code::F5) {
 			_show_demo_window = !_show_demo_window;
 			return true;
 		}

@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 
+#include "glfw_input.hpp"
 #include "glfw_window.hpp"
 
 namespace lich {
@@ -60,6 +61,7 @@ Glfw_Window::Glfw_Window(const Window_Spec &window_spec):
 	}
 	
 	glfwSetWindowUserPointer(_window, this);
+	Glfw_Input::init(_window);
 
 	_success = true;
 }
@@ -196,6 +198,8 @@ void Glfw_Window::glfw_close_callback_(GLFWwindow *window) {
 void Glfw_Window::glfw_focus_callback_(GLFWwindow *window, int focused) {
 	auto self = window_self_(window);
 	if (focused == GLFW_TRUE) {
+		Glfw_Input::init(window);
+		
 		Window_Focus_Event event;
 		self->_event_callback(*self, event);
 	} else {
