@@ -215,6 +215,8 @@ void Glfw_Window::glfw_pos_callback_(GLFWwindow *window, int xpos, int ypos) {
 }
 
 void Glfw_Window::glfw_size_callback_(GLFWwindow *window, int width, int height) {
+	glViewport(0, 0, width, height);
+	
 	auto self = window_self_(window);
 	Window_Size_Event event{width, height};
 	self->_event_callback(*self, event);

@@ -20,6 +20,8 @@
 #include <utility>
 #include <vector>
 
+#define LICH_ABORT() std::abort()
+
 namespace lich {
 
 using U8 = std::uint8_t;
