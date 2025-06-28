@@ -1,12 +1,19 @@
-#include "debug_render.hpp"
-
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 
-namespace lich::debug_render {
+#include "imgui.hpp"
+#include "log.hpp"
 
-void bootstrap(void *window_handle) {
+namespace lich {
+
+Imgui_Layer::Imgui_Layer(void *window_handle):
+	Layer{"lich::Imgui_Layer"}, _window_handle{window_handle} {
+}
+
+void Imgui_Layer::init(void) {
+	_show_demo_window = true;
+	
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
     
@@ -16,26 +23,37 @@ void bootstrap(void *window_handle) {
 	ImGui::GetStyle().ScaleAllSizes(io.FontGlobalScale = 1.0f);
 	ImGui::StyleColorsDark();
     
-	ImGui_ImplGlfw_InitForOpenGL(
-		static_cast<GLFWwindow *>(window_handle), true);
+	ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow *>(_window_handle), true);
 	ImGui_ImplOpenGL3_Init("#version 460");
 }
 
-void shutdown(void) {
+void Imgui_Layer::quit(void) {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 }
 
-void begin(void) {
+void Imgui_Layer::update(void) {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
-}
 
-void end(void) {
+	if (_show_demo_window) {
+		ImGui::ShowDemoWindow(&_show_demo_window);
+	}
+	
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void Imgui_Layer::handle(Event &event) {
+	 Event_Dispatcher{event}.handle<Key_Press_Event>([this] (const auto &event) -> bool {
+		if ((U32)event.code == 294) {
+			_show_demo_window = !_show_demo_window;
+			return true;
+		}
+		return false;
+	});
 }
 
 }

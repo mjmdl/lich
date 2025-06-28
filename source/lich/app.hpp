@@ -46,10 +46,12 @@ public:
 private:
 	bool _on_window_event(Window &window, Event &event);
 	
+protected:
+	std::unique_ptr<Window> _window;
+
 private:
 	App_Spec _app_spec;
 	Console_Args _console_args;
-	std::unique_ptr<Window> _window;
 	Layer_Stack _layer_stack;
 	bool _success;
 	bool _running;

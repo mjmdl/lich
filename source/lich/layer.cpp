@@ -12,12 +12,18 @@ Layer_Stack::~Layer_Stack(void) {
 }
 
 Usize Layer_Stack::push(std::unique_ptr<Layer> layer) {
+	layer->init();
 	_insert = _layers.emplace(_insert, std::move(layer));
 	return static_cast<Usize>(std::distance(_layers.begin(), _insert));
 }
 
 Usize Layer_Stack::push_over(std::unique_ptr<Layer> layer) {
+	layer->init();
+
+	Usize index = std::distance(_layers.begin(), _insert);
 	_layers.emplace_back(std::move(layer));
+	_insert = _layers.begin() + index;
+	
 	return _layers.size() - 1;
 }
 

@@ -1,3 +1,5 @@
+#include <lich/imgui.hpp>
+
 #include "events_logger_layer.hpp"
 #include "game.hpp"
 
@@ -8,6 +10,7 @@ Game::Game(const lich::Console_Args &console_args):
 	_logger{"sand::Game"} {
 
 	push_layer<Events_Logger_Layer>();
+	push_overlay<lich::Imgui_Layer>(_window->handle());
 		
 	_logger.trace("Hello!");
 }
