@@ -19,7 +19,8 @@ add_library(lich STATIC
 	source/lich/glfw_window.cpp
 	source/lich/imgui.cpp
 	source/lich/layer.cpp
-	source/lich/log.cpp)
+	source/lich/log.cpp
+	source/lich/opengl_renderer.cpp)
 
 target_include_directories(lich
 	PUBLIC source
@@ -37,6 +38,7 @@ endif()
 
 add_subdirectory(vendor)
 target_link_libraries(lich PUBLIC
+	expected
 	glad
 	glfw
 	glm
