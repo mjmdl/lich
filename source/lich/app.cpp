@@ -25,7 +25,7 @@ App::App(const AppSpec &app_spec, const ConsoleArgs &console_args):
 int App::run()
 {
 	if (not _success) return EXIT_FAILURE;
-	
+
 	_running = true;
 	while (_running) {
 		_window->update();

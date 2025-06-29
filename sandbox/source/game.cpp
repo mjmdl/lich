@@ -2,6 +2,7 @@
 
 #include "events_logger_layer.hpp"
 #include "game.hpp"
+#include "render_layer.hpp"
 
 namespace sand {
 
@@ -11,6 +12,7 @@ Game::Game(const lich::ConsoleArgs &console_args):
 {
 	push_layer<EventsLoggerLayer>();
 	push_overlay<lich::ImguiLayer>(_window->handle());
+	push_layer<RenderLayer>();
 		
 	_logger.trace("Hello!");
 }

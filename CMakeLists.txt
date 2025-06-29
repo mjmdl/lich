@@ -20,7 +20,8 @@ add_library(lich STATIC
 	source/lich/imgui.cpp
 	source/lich/layer.cpp
 	source/lich/log.cpp
-	source/lich/opengl_renderer.cpp)
+	source/lich/opengl_render.cpp
+	source/lich/render.cpp)
 
 target_include_directories(lich
 	PUBLIC source
@@ -31,7 +32,7 @@ target_precompile_headers(lich PUBLIC source/lich/pch.hpp)
 target_compile_definitions(lich PRIVATE LICH_COMPILE_STEP=1)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-	target_compile_options(lich PRIVATE -Wall -Wextra -Wpedantic)
+	target_compile_options(lich PRIVATE -Wall -Wextra -Wpedantic -g)
 elseif(MSVC)
 	target_compile_options(lich PRIVATE /W4)
 endif()

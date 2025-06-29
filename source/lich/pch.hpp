@@ -21,8 +21,9 @@
 #include <vector>
 
 #define LICH_ABORT() std::abort()
+#define LICH_UNREACHABLE() std::abort()
 
-namespace lich {
+namespace lich::types {
 
 using U8 = std::uint8_t;
 using U16 = std::uint16_t;
@@ -39,6 +40,12 @@ using B8 = I8;
 using B16 = I16;
 using B32 = I32;
 using Cstr = const char *;
+
+}
+
+namespace lich {
+
+using namespace types;
 
 }
 
