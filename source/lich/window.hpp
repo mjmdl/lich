@@ -5,7 +5,7 @@
 
 namespace lich {
 
-struct Window_Spec {
+struct WindowSpec {
 	std::string title = "Lich Engine";
 	U32 width = 960;
 	U32 height = 540;
@@ -14,34 +14,34 @@ struct Window_Spec {
 
 class Window {
 public:
-	using Event_Callback = std::function<bool(Window &self, Event &event)>;
+	using EventCallback = std::function<bool(Window &self, Event &event)>;
 	
-	static std::unique_ptr<Window> create(const Window_Spec &window_spec = {});
+	static std::unique_ptr<Window> create(const WindowSpec &window_spec = {});
 
-	virtual ~Window(void) = default;
+	virtual ~Window() = default;
 
-	virtual void update(void) = 0;
-	virtual void clear(void) = 0;
-	virtual void present(void) = 0;
+	virtual void update() = 0;
+	virtual void clear() = 0;
+	virtual void present() = 0;
 	
-	virtual bool success(void) const = 0;
-	virtual bool should_close(void) const = 0;
-	virtual bool visible(void) const = 0;
+	virtual bool success() const = 0;
+	virtual bool should_close() const = 0;
+	virtual bool visible() const = 0;
 	virtual void set_visible(bool visible) = 0;
-	virtual bool focused(void) const = 0;
+	virtual bool focused() const = 0;
 	virtual void set_focused(bool focused) = 0;
 
-	virtual void *handle(void) const = 0;
-	virtual const std::string &title(void) const = 0;
+	virtual void *handle() const = 0;
+	virtual const std::string &title() const = 0;
 	virtual void set_title(const std::string &title) = 0;
-	virtual std::pair<I32, I32> pos(void) const = 0;
+	virtual std::pair<I32, I32> pos() const = 0;
 	virtual void set_pos(I32 x, I32 y) = 0;
-	virtual std::pair<U32, U32> size(void) const = 0;
+	virtual std::pair<U32, U32> size() const = 0;
 	virtual void set_size(U32 width, U32 height) = 0;
-	virtual std::pair<U32, U32> screen_size(void) const = 0;
+	virtual std::pair<U32, U32> screen_size() const = 0;
 
-	virtual void set_event_callback(const Event_Callback &callback) = 0;
-	virtual void move_to_center(void) = 0;
+	virtual void set_event_callback(const EventCallback &callback) = 0;
+	virtual void move_to_center() = 0;
 };
 
 }

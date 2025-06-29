@@ -6,10 +6,10 @@
 
 namespace sand {
 
-class Events_Logger_Layer final : public lich::Layer {
+class EventsLoggerLayer final : public lich::Layer {
 public:
-	Events_Logger_Layer(void);
-	void update(void) override;
+	EventsLoggerLayer();
+	void update() override;
 	void handle(lich::Event &event) override;
 	
 private:

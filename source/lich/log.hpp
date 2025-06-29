@@ -5,7 +5,7 @@
 
 namespace lich {
 
-enum class Log_Level {
+enum class LogLevel {
 	Off = spdlog::level::off,
 	Trace = spdlog::level::trace,
 	Debug = spdlog::level::debug,
@@ -17,7 +17,8 @@ enum class Log_Level {
 
 #define GEN_MEMBER_FUNCTION(INT, IMPL) \
 	template<typename ...Args> \
-	void INT(spdlog::format_string_t<Args...> format, Args &&...args) { \
+	void INT(spdlog::format_string_t<Args...> format, Args &&...args) \
+	{ \
 		_logger->IMPL(std::move(format), std::forward<Args>(args)...); \
 	}
 
@@ -26,11 +27,10 @@ public:
 	static Logger engine_logger;
 	static Logger client_logger;
 
-	Logger(const std::string &name = "Logger",
-		Log_Level level = Log_Level::Trace);
-	const std::string &name(void) const;
-	Log_Level level(void) const;
-	void set_level(Log_Level level);
+	Logger(const std::string &name = "Logger", LogLevel level = LogLevel::Trace);
+	const std::string &name() const;
+	LogLevel level() const;
+	void set_level(LogLevel level);
 
 	GEN_MEMBER_FUNCTION(trace, trace)
 	GEN_MEMBER_FUNCTION(debug, debug)
@@ -51,7 +51,8 @@ private:
 
 #define GEN_FUNCTION(NAME) \
 	template<typename ...Args> \
-	inline void log_##NAME(spdlog::format_string_t<Args...> format, Args &&...args) { \
+	inline void log_##NAME(spdlog::format_string_t<Args...> format, Args &&...args) \
+	{ \
 		SELECTED_LOGGER.NAME(std::move(format), std::forward<Args>(args)...); \
 	}
 

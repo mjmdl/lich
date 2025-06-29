@@ -9,31 +9,31 @@ namespace lich {
 class Layer {
 public:
 	Layer(const std::string &name = "Layer"): _name{name} {}
-	virtual ~Layer(void) = default;
+	virtual ~Layer() = default;
 
-	virtual void init(void) {}
-	virtual void quit(void) {}
-	virtual void update(void) {}
-	virtual void handle(Event &event) { (void)event; }
+	virtual void init() {}
+	virtual void quit() {}
+	virtual void update() {}
+	virtual void handle([[maybe_unused]] Event &event) {}
 
-	inline const std::string &name(void) const { return _name; }
+	inline const std::string &name() const { return _name; }
 	
 private:
 	std::string _name;
 };
 
-class Layer_Stack {
+class LayerStack {
 public:
 	using Predicate = std::function<bool(const std::unique_ptr<Layer> &layer)>;
 	
-	Layer_Stack(void);
-	~Layer_Stack(void);
+	LayerStack();
+	~LayerStack();
 
 	Usize push(std::unique_ptr<Layer> layer);
 	Usize push_over(std::unique_ptr<Layer> layer);
 	std::unique_ptr<Layer> remove(Predicate predicate);
 
-	void update(void);
+	void update();
 	void handle(Event &event);
 		
 private:
@@ -42,7 +42,7 @@ private:
 };
 
 template<typename Type>
-concept Layer_Derived = std::derived_from<Type, Layer>;
+concept LayerDerived = std::derived_from<Type, Layer>;
 
 }
 

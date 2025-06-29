@@ -4,10 +4,11 @@
 
 namespace sand {
 
-Events_Logger_Layer::Events_Logger_Layer(void):
-	Layer{"Events_Logger"}, _logger{"sand::Events_Logger"} {}
+EventsLoggerLayer::EventsLoggerLayer():
+	Layer{"EventsLoggerLayer"}, _logger{"sand::EventsLoggerLayer"} {}
 
-void Events_Logger_Layer::update(void) {
+void EventsLoggerLayer::update()
+{
 	const auto [x, y] = lich::Input::mouse_pos();
 	if (std::fabs(x - _mouse_x) > 100 or std::fabs(y - _mouse_y) > 100) {
 		_logger.debug("Mouse position: {}:{}", x, y);
@@ -16,8 +17,9 @@ void Events_Logger_Layer::update(void) {
 	}
 }
 
-void Events_Logger_Layer::handle(lich::Event &event) {
-	if (event.flags() & (int)lich::Event_Flag::Window) {
+void EventsLoggerLayer::handle(lich::Event &event)
+{
+	if (event.flags() & (int)lich::EventFlag::Window) {
 		_logger.debug("Window event received: {}", event.string());
 	}
 }

@@ -9,37 +9,37 @@
 
 namespace lich {
 
-class Glfw_Window final : public Window {
+class GlfwWindow final: public Window {
 public:
-	Glfw_Window(const Window_Spec &window_spec = {});
-	~Glfw_Window(void) override;
+	GlfwWindow(const WindowSpec &window_spec = {});
+	~GlfwWindow() override;
 
-	void update(void) override;
-	void clear(void) override;
-	void present(void) override;
+	void update() override;
+	void clear() override;
+	void present() override;
 
-	bool success(void) const override;
-	bool should_close(void) const override;
-	bool visible(void) const override;
+	bool success() const override;
+	bool should_close() const override;
+	bool visible() const override;
 	void set_visible(bool visible) override;
-	bool focused(void) const override;
+	bool focused() const override;
 	void set_focused(bool focused) override;
 
-	void *handle(void) const override;
-	const std::string &title(void) const override;
+	void *handle() const override;
+	const std::string &title() const override;
 	void set_title(const std::string &title) override;
-	std::pair<I32, I32> pos(void) const override;
+	std::pair<I32, I32> pos() const override;
 	void set_pos(I32 x, I32 y) override;
-	std::pair<U32, U32> size(void) const override;
+	std::pair<U32, U32> size() const override;
 	void set_size(U32 width, U32 height) override;
-	std::pair<U32, U32> screen_size(void) const override;
+	std::pair<U32, U32> screen_size() const override;
 
-	void set_event_callback(const Event_Callback &callback) override;
-	void move_to_center(void) override;
+	void set_event_callback(const EventCallback &callback) override;
+	void move_to_center() override;
 
 private:
 	static void glfw_error_callback_(int error, const char *description);
-	static Glfw_Window *window_self_(GLFWwindow *handle);
+	static GlfwWindow *window_self_(GLFWwindow *handle);
 
 	static void glfw_close_callback_(GLFWwindow *window);
 	static void glfw_focus_callback_(GLFWwindow *window, int focused);
@@ -57,11 +57,11 @@ private:
 private:
 	inline static bool glfw_init_ = false;
 	inline static U32 window_count_ = 0;
-	inline static Logger logger_{"lich::Glfw_Window"};
+	inline static Logger logger_{"lich::GlfwWindow"};
 	
 	GLFWwindow *_window;
 	std::string _title;
-	Event_Callback _event_callback;
+	EventCallback _event_callback;
 	bool _success;
 };
 

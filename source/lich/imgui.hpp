@@ -5,13 +5,13 @@
 
 namespace lich {
 
-class Imgui_Layer : public Layer {
+class ImguiLayer final: public Layer {
 public:
-	Imgui_Layer(void *window_handle);
+	ImguiLayer(void *window_handle);
 
-	void init(void) override;
-	void quit(void) override;
-	void update(void) override;
+	void init() override;
+	void quit() override;
+	void update() override;
 	void handle(Event &event) override;
 
 private:

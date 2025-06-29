@@ -6,9 +6,9 @@ namespace lich {
 class Shader {
 public:
 	Shader(const std::string &vertex_code, const std::string &fragment_code);
-	~Shader(void);
+	~Shader();
 
-	void bind(void);
+	void bind();
 
 private:
 	U32 _id;

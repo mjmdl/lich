@@ -7,7 +7,8 @@
 namespace lich {
 
 static tl::expected<GLuint, std::string>
-compile_shader_type_(const GLchar *source, GLenum type) {
+compile_shader_type_(const GLchar *source, GLenum type)
+{
 	GLuint shader = glCreateShader(type);
 	glShaderSource(shader, 1, &source, NULL);
 	glCompileShader(shader);
@@ -29,8 +30,8 @@ compile_shader_type_(const GLchar *source, GLenum type) {
 }
 
 Shader::Shader(const std::string &vertex_source, const std::string &fragment_source):
-	_id{0} {
-	
+	_id{0}
+{	
 	const GLchar *source = reinterpret_cast<const GLchar *>(vertex_source.c_str());
 	auto vertex = compile_shader_type_(source, GL_VERTEX_SHADER);
 	if (!vertex) {
@@ -71,11 +72,13 @@ Shader::Shader(const std::string &vertex_source, const std::string &fragment_sou
 	_id = program;
 }
 
-Shader::~Shader(void) {
+Shader::~Shader()
+{
 	glDeleteProgram(_id);
 }
 
-void Shader::bind(void) {
+void Shader::bind()
+{
 	glUseProgram(_id);
 }
 
