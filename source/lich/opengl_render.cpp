@@ -88,6 +88,30 @@ static GLenum equivalent_opengl_type(ShaderDataType type)
 }
 
 /*
+ * class OpenglRendererApi
+ */
+
+void OpenglRendererApi::set_clear_color(const glm::vec4 &color)
+{
+	glClearColor(color.r, color.g, color.b, color.a);
+}
+
+void OpenglRendererApi::clear()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void OpenglRendererApi::draw_indexed(const std::unique_ptr<VertexArray> &vertex_array)
+{
+	if (vertex_array->index_buffer()) {
+		glDrawElements(GL_TRIANGLES, vertex_array->index_buffer()->count(),
+			GL_UNSIGNED_INT, NULL);
+	} else {
+		glDrawArrays(GL_TRIANGLES, 0, vertex_array->vertex_count());
+	}
+}
+
+/*
  * class OpenglVertexArray
  */
 
@@ -151,15 +175,6 @@ void OpenglVertexArray::set_index_buffer(std::unique_ptr<IndexBuffer> &&ebo)
 	ebo->bind();
 
 	_index_buffer = std::move(ebo);
-}
-
-void OpenglVertexArray::draw()
-{
-	if (_index_buffer) {
-		glDrawElements(GL_TRIANGLES, _index_buffer->count(), GL_UNSIGNED_INT, NULL);
-	} else {
-		glDrawArrays(GL_TRIANGLES, 0, _vertex_count);
-	}
 }
 
 /*

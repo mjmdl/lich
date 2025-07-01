@@ -1,5 +1,6 @@
 #include "app.hpp"
 #include "log.hpp"
+#include "render.hpp"
 
 namespace lich {
 
@@ -28,11 +29,16 @@ int App::run()
 
 	_running = true;
 	while (_running) {
-		_window->update();
-		_window->clear();
-		
+		RenderCommand::set_clear_color(glm::vec4{0.5f, 0.2f, 0.5f, 1.0f});
+		RenderCommand::clear();
+
+		Renderer::begin_scene();
+
 		_layer_stack.update();
 		
+		Renderer::end_scene();
+		
+		_window->update();
 		_window->present();
 	}
 	

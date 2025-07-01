@@ -81,9 +81,8 @@ RenderLayer::RenderLayer()
 
 void RenderLayer::update()
 {
-	_vertex_array->bind();
 	_shader->bind();
-	_vertex_array->draw();
+	lich::Renderer::submit(_vertex_array);
 }
 
 }

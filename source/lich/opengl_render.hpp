@@ -24,6 +24,13 @@ void pop_opengl_errors();
 void check_opengl_error(const char *file, int line);
 void assert_opengl_error(const char *file, int line);
 
+class OpenglRendererApi final: public RendererApi {
+public:
+	void set_clear_color(const glm::vec4 &color) override;
+	void clear() override;
+	void draw_indexed(const std::unique_ptr<VertexArray> &vertex_array) override;
+};
+
 class OpenglVertexArray: public VertexArray {
 public:
 	OpenglVertexArray();
@@ -32,7 +39,8 @@ public:
 	void unbind() override;
 	void add_vertex_buffer(std::unique_ptr<VertexBuffer> &&vbo) override;
 	void set_index_buffer(std::unique_ptr<IndexBuffer> &&ebo) override;
-	void draw() override;
+	const std::unique_ptr<IndexBuffer> &index_buffer() const override { return _index_buffer; }
+	Usize vertex_count() const { return _vertex_count; }
 
 private:
 	std::vector<std::unique_ptr<VertexBuffer>> _vertex_buffers;
