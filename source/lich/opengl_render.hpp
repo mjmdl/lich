@@ -88,7 +88,8 @@ public:
 	~OpenglShader() override { glDeleteProgram(_program); }
 	void bind() override { glUseProgram(_program); }
 	void unbind() override { glUseProgram(0); }
-
+	void upload_uniform(const std::string &name, const glm::mat4 &matrix) override;
+	
 	void *handle() const override
 	{
 		return reinterpret_cast<void *>(static_cast<uintptr_t>(_program));

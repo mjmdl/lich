@@ -47,7 +47,10 @@ void LayerStack::handle(Event &event)
 {
 	for (auto &layer : _layers | std::views::reverse) {
 		layer->handle(event);
-		if (event.handled) break;
+		if (event.handled) {
+			log_trace("Event handled: {}", event.string());
+			break;
+		}
 	}
 }
 

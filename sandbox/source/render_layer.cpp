@@ -22,10 +22,12 @@ const char *vertex_source_ = R"glsl(
 	layout(location = 0) in vec2 pos;
 	layout(location = 1) in vec3 color;
 	out vec3 v_color;
-	
+
+	uniform mat4 u_view_projection;
+
 	void main()
 	{
-		gl_Position = vec4(pos.xy, 0, 1);
+		gl_Position = u_view_projection * vec4(pos.xy, 0, 1);
 		v_color     = color;
 	})glsl";
 const char *fragment_source_ = R"glsl(
@@ -39,9 +41,12 @@ const char *fragment_source_ = R"glsl(
 		f_color = vec4(v_color.xyz, 1);
 	})glsl";
 
-RenderLayer::RenderLayer()
+RenderLayer::RenderLayer(float aspect_ratio):
+	_camera{-1.0f, 1.0f, -1.0f, 1.0f}
 {
 	using namespace lich;
+
+	_camera.set_aspect_ratio(aspect_ratio);
 
 	auto vao_result = VertexArray::create();
 	if (!vao_result) {
@@ -82,7 +87,20 @@ RenderLayer::RenderLayer()
 void RenderLayer::update()
 {
 	_shader->bind();
+	_shader->upload_uniform("u_view_projection", _camera.view_projection());
 	lich::Renderer::submit(_vertex_array);
+}
+
+void RenderLayer::handle(lich::Event &event)
+{
+	lich::EventDispatcher dispatcher{event};
+	dispatcher.handle<lich::WindowSizeEvent>([this] (const auto &size) -> bool
+	{
+		float aspect_ratio =
+			static_cast<float>(size.width) / static_cast<float>(size.height);
+		_camera.set_aspect_ratio(aspect_ratio);
+		return false;
+	});
 }
 
 }

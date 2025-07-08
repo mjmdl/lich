@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 #include <tl/expected.hpp>
 
 #include "log.hpp"
@@ -317,6 +318,18 @@ tl::expected<std::unique_ptr<Shader>, std::string> OpenglShader::compile(
 	}
 
 	return std::make_unique<OpenglShader>(program);
+}
+
+void OpenglShader::upload_uniform(const std::string &name, const glm::mat4 &matrix)
+{
+	GL_CHECK(glUseProgram(_program));
+
+	GLint location;
+	const char *cstring = name.c_str();
+	GL_CHECK(location = glGetUniformLocation(_program, cstring));
+	if (location < 0) log_warn("GLSL uniform location '{}' not found.", name);
+	
+	GL_CHECK(glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix)));
 }
 
 }

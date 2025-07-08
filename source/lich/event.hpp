@@ -33,7 +33,7 @@ enum class EventFlag: EventFlags {
 };
 
 struct Event {
-	bool handled;
+	bool handled = false;
 
 	virtual ~Event() = default;
 	

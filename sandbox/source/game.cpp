@@ -12,7 +12,7 @@ Game::Game(const lich::ConsoleArgs &console_args):
 {
 	push_layer<EventsLoggerLayer>();
 	push_overlay<lich::ImguiLayer>(_window->handle());
-	push_layer<RenderLayer>();
+	push_layer<RenderLayer>(app_spec().width / app_spec().height);
 		
 	_logger.trace("Hello!");
 }

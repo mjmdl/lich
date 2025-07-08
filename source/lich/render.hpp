@@ -56,6 +56,46 @@ public:
 	static void submit(const std::unique_ptr<VertexArray> &vertex_array);
 };
 
+class OrthographicCamera2d {
+public:
+	OrthographicCamera2d(float left, float right, float bottom, float top);
+
+	const glm::vec3 &position() const { return _position; }
+	float rotation() const { return _rotation; }
+	const glm::mat4 &projection() const { return _projection; }
+	const glm::mat4 &view() const { return _view; }
+	const glm::mat4 &view_projection() const { return _view_projection; }
+	void set_aspect_ratio(float aspect_ratio);
+
+	void set_position(const glm::vec3 &position)
+	{
+		_position = position;
+		_recalculate_view_matrix();
+	}
+
+	void set_rotation(float rotation)
+	{
+		_rotation = rotation;
+		_recalculate_view_matrix();
+	}
+	
+private:
+	void _recalculate_view_matrix();
+	
+private:
+	glm::mat4 _projection;
+	glm::mat4 _view;
+	glm::mat4 _view_projection;
+
+	glm::vec3 _position;
+	float _rotation;
+	
+	float _left;
+	float _right;
+	float _bottom;
+	float _top;
+};
+
 enum class ShaderDataType {
 	None = 0,
 	Bool,
@@ -150,6 +190,7 @@ public:
 	virtual void bind() = 0;
 	virtual void unbind() = 0;
 	virtual void *handle() const = 0;
+	virtual void upload_uniform(const std::string &name, const glm::mat4 &matrix) = 0;
 };
 
 }
