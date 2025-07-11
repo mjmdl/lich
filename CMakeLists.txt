@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(lich
+project(
+	lich
 	DESCRIPTION "Lich Engine"
 	VERSION "0.0.1"
-	LANGUAGES CXX)
+	LANGUAGES CXX
+)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -13,7 +15,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 
-add_library(lich STATIC
+add_library(
+	lich STATIC
 	source/lich/app.cpp
 	source/lich/glfw_input.cpp
 	source/lich/glfw_window.cpp
@@ -21,11 +24,14 @@ add_library(lich STATIC
 	source/lich/layer.cpp
 	source/lich/log.cpp
 	source/lich/opengl_render.cpp
-	source/lich/render.cpp)
+	source/lich/render.cpp
+)
 
-target_include_directories(lich
+target_include_directories(
+	lich
 	PUBLIC source
-	PRIVATE source/lich)
+	PRIVATE source/lich
+)
 
 target_precompile_headers(lich PUBLIC source/lich/pch.hpp)
 
@@ -38,13 +44,15 @@ elseif(MSVC)
 endif()
 
 add_subdirectory(vendor)
-target_link_libraries(lich PUBLIC
+target_link_libraries(
+	lich PUBLIC
 	expected
 	glad
 	glfw
 	glm
 	imgui
 	spdlog
-	stb)
+	stb
+)
 
 add_subdirectory(sandbox)

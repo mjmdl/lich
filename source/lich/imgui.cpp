@@ -6,12 +6,17 @@
 #include "input.hpp"
 #include "log.hpp"
 
-namespace lich {
+namespace lich
+{
 
-ImguiLayer::ImguiLayer(void *window_handle):
-	Layer{"lich::ImguiLayer"}, _window_handle{window_handle} {}
+Imgui_Layer::
+Imgui_Layer(void *window_handle):
+	Layer{"lich::Imgui_Layer"}, _window_handle{window_handle}
+{
+}
 
-void ImguiLayer::init()
+void Imgui_Layer::
+init()
 {
 	_show_demo_window = true;
 	
@@ -28,30 +33,35 @@ void ImguiLayer::init()
 	ImGui_ImplOpenGL3_Init("#version 460");
 }
 
-void ImguiLayer::quit()
+void Imgui_Layer::
+quit()
 {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 }
 
-void ImguiLayer::update()
+void Imgui_Layer::
+update()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	if (_show_demo_window) ImGui::ShowDemoWindow(&_show_demo_window);
+	if (_show_demo_window)
+		ImGui::ShowDemoWindow(&_show_demo_window);
 	
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void ImguiLayer::handle(Event &event)
+void Imgui_Layer::
+handle(Event &event)
 {
-	 EventDispatcher{event}.handle<KeyPressEvent>([this] (const auto &event) -> bool
-	 {
-		 if (event.code == KeyCode::F5) {
+	Event_Dispatcher{event}.handle<Key_Press_Event>([this] (const auto &event) -> bool
+	{
+		if (event.code == Key_Code::F5)
+		{
 			_show_demo_window = !_show_demo_window;
 			return true;
 		}

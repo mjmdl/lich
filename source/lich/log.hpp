@@ -3,9 +3,11 @@
 
 #include <spdlog/logger.h>
 
-namespace lich {
+namespace lich
+{
 
-enum class LogLevel {
+enum class Log_Level
+{
 	Off = spdlog::level::off,
 	Trace = spdlog::level::trace,
 	Debug = spdlog::level::debug,
@@ -17,20 +19,22 @@ enum class LogLevel {
 
 #define GEN_MEMBER_FUNCTION(INT, IMPL) \
 	template<typename ...Args> \
-	void INT(spdlog::format_string_t<Args...> format, Args &&...args) \
+	void \
+	INT(spdlog::format_string_t<Args...> format, Args &&...args) \
 	{ \
 		_logger->IMPL(std::move(format), std::forward<Args>(args)...); \
 	}
 
-class Logger {
+class Logger
+{
 public:
 	static Logger engine_logger;
 	static Logger client_logger;
 
-	Logger(const std::string &name = "Logger", LogLevel level = LogLevel::Trace);
+	Logger(const std::string &name = "Logger", Log_Level level = Log_Level::Trace);
 	const std::string &name() const;
-	LogLevel level() const;
-	void set_level(LogLevel level);
+	Log_Level level() const;
+	void set_level(Log_Level level);
 
 	GEN_MEMBER_FUNCTION(trace, trace)
 	GEN_MEMBER_FUNCTION(debug, debug)
@@ -51,7 +55,8 @@ private:
 
 #define GEN_FUNCTION(NAME) \
 	template<typename ...Args> \
-	inline void log_##NAME(spdlog::format_string_t<Args...> format, Args &&...args) \
+	inline void \
+	log_##NAME(spdlog::format_string_t<Args...> format, Args &&...args) \
 	{ \
 		SELECTED_LOGGER.NAME(std::move(format), std::forward<Args>(args)...); \
 	}
@@ -64,22 +69,26 @@ GEN_FUNCTION(error)
 GEN_FUNCTION(fatal)
 
 #define LICH_ASSERT(EXPRESSION, ...) \
-	do { \
-		if (not (EXPRESSION)) { \
-			lich::log_fatal("Assertion failure at {}:{}: {}", \
-				__FILE__, __LINE__, #EXPRESSION); \
+	do \
+	{ \
+		if (not (EXPRESSION)) \
+		{ \
+			lich::log_fatal("Assertion failure at {}:{}: {}", __FILE__, __LINE__, #EXPRESSION ); \
 			lich::log_fatal(__VA_ARGS__); \
 			std::exit(EXIT_FAILURE); \
 		} \
-	} while (0)
+	} \
+	while (0)
 #define LICH_EXPECT(EXPRESSION, ...) \
-	do { \
-		if (not (EXPRESSION)) { \
-			lich::log_error("Unexpected failure at {}:{}: {}", \
-				__FILE__, __LINE__, #EXPRESSION); \
+	do \
+	{ \
+		if (not (EXPRESSION)) \
+		{ \
+			lich::log_error("Unexpected failure at {}:{}: {}", __FILE__, __LINE__, #EXPRESSION); \
 			lich::log_error(__VA_ARGS__); \
 		} \
-	} while (0)
+	} \
+	while (0)
 
 #undef GEN_FUNCTION
 #undef SELECTED_LOGGER

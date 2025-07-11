@@ -4,9 +4,11 @@
 #include "event.hpp"
 #include "log.hpp"
 
-namespace lich {
+namespace lich
+{
 
-class Layer {
+class Layer
+{
 public:
 	Layer(const std::string &name = "Layer"): _name{name} {}
 	virtual ~Layer() = default;
@@ -16,18 +18,19 @@ public:
 	virtual void update() {}
 	virtual void handle([[maybe_unused]] Event &event) {}
 
-	inline const std::string &name() const { return _name; }
+	const std::string &name() const;
 	
 private:
 	std::string _name;
 };
 
-class LayerStack {
+class Layer_Stack
+{
 public:
 	using Predicate = std::function<bool(const std::unique_ptr<Layer> &layer)>;
 	
-	LayerStack();
-	~LayerStack();
+	Layer_Stack();
+	~Layer_Stack();
 
 	Usize push(std::unique_ptr<Layer> layer);
 	Usize push_over(std::unique_ptr<Layer> layer);
@@ -42,7 +45,7 @@ private:
 };
 
 template<typename Type>
-concept LayerDerived = std::derived_from<Type, Layer>;
+concept Layer_Derived = std::derived_from<Type, Layer>;
 
 }
 

@@ -1,15 +1,19 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(sandbox
+project(
+	sandbox
 	DESCRIPTION "Lich Sandbox"
 	VERSION "0.0.1"
-	LANGUAGES CXX)
+	LANGUAGES CXX
+)
 
-add_executable(sandbox
+add_executable(
+	sandbox
 	source/events_logger_layer.cpp
 	source/game.cpp
 	source/main.cpp
-	source/render_layer.cpp)
+	source/render_layer.cpp
+)
 
 target_include_directories(sandbox PRIVATE source)
 

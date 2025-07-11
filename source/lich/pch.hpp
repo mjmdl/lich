@@ -23,7 +23,8 @@
 #define LICH_ABORT() std::abort()
 #define LICH_UNREACHABLE() std::abort()
 
-namespace lich::types {
+namespace lich::types
+{
 
 using U8 = std::uint8_t;
 using U16 = std::uint16_t;
