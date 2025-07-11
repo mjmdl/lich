@@ -6,20 +6,17 @@
 
 namespace sand {
 
-Game::Game(const lich::ConsoleArgs &console_args):
-	App{lich::AppSpec{"Sandbox", 800, 600}, console_args},
+Game::Game(const lich::Console_Args &console_args) :
+	App{lich::App_Spec{"Sandbox", 800, 600}, console_args},
 	_logger{"sand::Game"}
 {
-	push_layer<EventsLoggerLayer>();
-	push_overlay<lich::ImguiLayer>(_window->handle());
-	push_layer<RenderLayer>(app_spec().width / app_spec().height);
+	push_layer<Events_Logger_Layer>();
+	push_overlay<lich::Imgui_Layer>(_window->handle());
+	push_layer<Render_Layer>(app_spec().width / app_spec().height);
 		
 	_logger.trace("Hello!");
 }
 
-Game::~Game()
-{
-	_logger.trace("Goodbye!");
-}
+Game::~Game() { _logger.trace("Goodbye!"); }
 
 }

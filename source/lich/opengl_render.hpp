@@ -24,76 +24,71 @@ void pop_opengl_errors();
 void check_opengl_error(const char *file, int line);
 void assert_opengl_error(const char *file, int line);
 
-class OpenglRendererApi final: public RendererApi {
+class Opengl_Renderer_Api final : public Renderer_Api {
 public:
 	void set_clear_color(const glm::vec4 &color) override;
 	void clear() override;
-	void draw_indexed(const std::unique_ptr<VertexArray> &vertex_array) override;
+	void draw_indexed(const std::unique_ptr<Vertex_Array> &vertex_array) override;
 };
 
-class OpenglVertexArray: public VertexArray {
+class Opengl_Vertex_Array : public Vertex_Array {
 public:
-	OpenglVertexArray();
-	~OpenglVertexArray() override;
+	Opengl_Vertex_Array();
+	~Opengl_Vertex_Array() override;
 	void bind() override;
 	void unbind() override;
-	void add_vertex_buffer(std::unique_ptr<VertexBuffer> &&vbo) override;
-	void set_index_buffer(std::unique_ptr<IndexBuffer> &&ebo) override;
-	const std::unique_ptr<IndexBuffer> &index_buffer() const override { return _index_buffer; }
-	Usize vertex_count() const { return _vertex_count; }
+	void add_vertex_buffer(std::unique_ptr<Vertex_Buffer> &&vbo) override;
+	void set_index_buffer(std::unique_ptr<Index_Buffer> &&ebo) override;
+	const std::unique_ptr<Index_Buffer> &index_buffer() const override;
+	Usize vertex_count() const override;
 
 private:
-	std::vector<std::unique_ptr<VertexBuffer>> _vertex_buffers;
-	std::unique_ptr<IndexBuffer> _index_buffer;
+	std::vector<std::unique_ptr<Vertex_Buffer>> _vertex_buffers;
+	std::unique_ptr<Index_Buffer> _index_buffer;
 	Usize _vertex_count;
 	GLuint _vao;
 };
 
-class OpenglVertexBuffer final: public VertexBuffer {
+class Opengl_Vertex_Buffer final : public Vertex_Buffer {
 public:
-	OpenglVertexBuffer(const F32 *vertices, Usize count);
-	~OpenglVertexBuffer() override;
+	Opengl_Vertex_Buffer(const F32 *vertices, Usize count);
+	~Opengl_Vertex_Buffer() override;
 	void bind() override;
 	void unbind() override;
-	void set_layout(const std::unique_ptr<Shader> &shader,
-		const BufferLayout &layout) override;
-	const BufferLayout &layout() const override { return _layout; }
-	Usize size() const override { return _count * sizeof (F32); }
+	void set_layout(const std::unique_ptr<Shader> &shader, const Buffer_Layout &layout) override;
+	const Buffer_Layout &layout() const override;
+	Usize size() const override;
 
 private:
-	BufferLayout _layout;
+	Buffer_Layout _layout;
 	Usize _count;
 	GLuint _vbo;
 };
 
-class OpenglIndexBuffer final: public IndexBuffer {
+class Opengl_Index_Buffer final : public Index_Buffer {
 public:
-	OpenglIndexBuffer(const U32 *indices, Usize count);
-	~OpenglIndexBuffer() override;
+	Opengl_Index_Buffer(const U32 *indices, Usize count);
+	~Opengl_Index_Buffer() override;
 	void bind() override;
 	void unbind() override;
-	Usize count() const override { return _count; }
+	Usize count() const override;
 
 private:
 	GLuint _ebo;
 	Usize _count;
 };
 
-class OpenglShader final: public Shader {
+class Opengl_Shader final : public Shader {
 public:
-	static tl::expected<std::unique_ptr<Shader>, std::string> compile(
-		const std::string &vertex_source, const std::string &fragment_source);
+	static tl::expected<std::unique_ptr<Shader>, std::string>
+	compile(const std::string &vertex_source, const std::string &fragment_source);
 	
-	OpenglShader(GLuint program): _program{program} {}
-	~OpenglShader() override { glDeleteProgram(_program); }
-	void bind() override { glUseProgram(_program); }
-	void unbind() override { glUseProgram(0); }
+	Opengl_Shader(GLuint program);
+	~Opengl_Shader() override;
+	void bind() override;
+	void unbind() override;
 	void upload_uniform(const std::string &name, const glm::mat4 &matrix) override;
-	
-	void *handle() const override
-	{
-		return reinterpret_cast<void *>(static_cast<uintptr_t>(_program));
-	}
+	void *handle() const override;
 	
 private:
 	GLuint _program;

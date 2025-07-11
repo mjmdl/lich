@@ -6,16 +6,16 @@
 
 namespace sand {
 
-class RenderLayer final: public lich::Layer {
+class Render_Layer final : public lich::Layer {
 public:
-	RenderLayer(float aspect_ratio);
+	Render_Layer(float aspect_ratio);
 	void update() override;
 	void handle(lich::Event &event) override;
 
 private:
-	std::unique_ptr<lich::VertexArray> _vertex_array;
+	std::unique_ptr<lich::Vertex_Array> _vertex_array;
 	std::unique_ptr<lich::Shader> _shader;
-	lich::OrthographicCamera2d _camera;
+	lich::Orthographic_Camera_2d _camera;
 };
 
 }

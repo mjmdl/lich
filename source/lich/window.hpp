@@ -5,7 +5,7 @@
 
 namespace lich {
 
-struct WindowSpec {
+struct Window_Spec {
 	std::string title = "Lich Engine";
 	U32 width = 960;
 	U32 height = 540;
@@ -14,9 +14,9 @@ struct WindowSpec {
 
 class Window {
 public:
-	using EventCallback = std::function<bool(Window &self, Event &event)>;
+	using Event_Callback = std::function<bool(Window &self, Event &event)>;
 	
-	static std::unique_ptr<Window> create(const WindowSpec &window_spec = {});
+	static std::unique_ptr<Window> create(const Window_Spec &window_spec = {});
 
 	virtual ~Window() = default;
 
@@ -40,7 +40,7 @@ public:
 	virtual void set_size(U32 width, U32 height) = 0;
 	virtual std::pair<U32, U32> screen_size() const = 0;
 
-	virtual void set_event_callback(const EventCallback &callback) = 0;
+	virtual void set_event_callback(const Event_Callback &callback) = 0;
 	virtual void move_to_center() = 0;
 };
 

@@ -8,7 +8,7 @@ namespace sand {
 
 class Game final : public lich::App {
 public:
-	Game(const lich::ConsoleArgs &console_args);
+	Game(const lich::Console_Args &console_args);
 	virtual ~Game();
 
 private:

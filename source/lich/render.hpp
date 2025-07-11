@@ -6,78 +6,58 @@
 
 namespace lich {
 
-class VertexArray;
-class VertexBuffer;
-class IndexBuffer;
+class Vertex_Array;
+class Vertex_Buffer;
+class Index_Buffer;
 class Shader;
 
-enum class RenderApi {
+enum class Render_Api {
 	None = 0,
 	Opengl,
 };
 
-class RendererApi {
+class Renderer_Api {
 public:
-	inline static RenderApi api() { return api_; }
+	static Render_Api api();
 
 	virtual void set_clear_color(const glm::vec4 &color) = 0;
 	virtual void clear() = 0;
-	virtual void draw_indexed(const std::unique_ptr<VertexArray> &vertex_array) = 0;
+	virtual void draw_indexed(const std::unique_ptr<Vertex_Array> &vertex_array) = 0;
 
 private:
-	inline static RenderApi api_ = RenderApi::Opengl;
+	inline static Render_Api api_ = Render_Api::Opengl;
 };
 
-class RenderCommand {
+class Render_Command {
 public:
-	inline static void set_clear_color(const glm::vec4 &color)
-	{
-		renderer_api_->set_clear_color(color);
-	}
-	
-	inline static void clear()
-	{
-		renderer_api_->clear();
-	}
-		
-	inline static void draw_indexed(const std::unique_ptr<VertexArray> &vertex_array)
-	{
-		renderer_api_->draw_indexed(vertex_array);
-	}
+	static void set_clear_color(const glm::vec4 &color);
+	static void clear();
+	static void draw_indexed(const std::unique_ptr<Vertex_Array> &vertex_array);
 	
 private:
-	static RendererApi *renderer_api_;
+	static Renderer_Api *renderer_api_;
 };
 
 class Renderer {
 public:
 	static void begin_scene();
 	static void end_scene();
-	static void submit(const std::unique_ptr<VertexArray> &vertex_array);
+	static void submit(const std::unique_ptr<Vertex_Array> &vertex_array);
 };
 
-class OrthographicCamera2d {
+class Orthographic_Camera_2d {
 public:
-	OrthographicCamera2d(float left, float right, float bottom, float top);
+	Orthographic_Camera_2d(float left, float right, float bottom, float top);
 
-	const glm::vec3 &position() const { return _position; }
-	float rotation() const { return _rotation; }
-	const glm::mat4 &projection() const { return _projection; }
-	const glm::mat4 &view() const { return _view; }
-	const glm::mat4 &view_projection() const { return _view_projection; }
+	const glm::vec3 &position() const;
+	float rotation() const;
+	const glm::mat4 &projection() const;
+	const glm::mat4 &view() const;
+	const glm::mat4 &view_projection() const;
+
 	void set_aspect_ratio(float aspect_ratio);
-
-	void set_position(const glm::vec3 &position)
-	{
-		_position = position;
-		_recalculate_view_matrix();
-	}
-
-	void set_rotation(float rotation)
-	{
-		_rotation = rotation;
-		_recalculate_view_matrix();
-	}
+	void set_position(const glm::vec3 &position);
+	void set_rotation(float rotation);
 	
 private:
 	void _recalculate_view_matrix();
@@ -96,7 +76,7 @@ private:
 	float _top;
 };
 
-enum class ShaderDataType {
+enum class Shader_Data_Type {
 	None = 0,
 	Bool,
 	Int,
@@ -111,71 +91,58 @@ enum class ShaderDataType {
 	Mat4,
 };
 
-Usize component_count_of(ShaderDataType type);
-Usize size_of(ShaderDataType type);
+Usize component_count_of(Shader_Data_Type type);
+Usize size_of(Shader_Data_Type type);
 
-struct BufferAttrib {
+struct Buffer_Attrib {
 	std::string name;
-	ShaderDataType type;
+	Shader_Data_Type type;
 	Usize offset;
 
-	BufferAttrib(ShaderDataType type, const std::string &name):
-		name{name}, type{type}, offset{0} {}
+	Buffer_Attrib(Shader_Data_Type type, const std::string &name);
 };
 
-struct BufferLayout {
-	std::vector<BufferAttrib> attribs;
+struct Buffer_Layout {
+	std::vector<Buffer_Attrib> attribs;
 	Usize stride;
 
-	BufferLayout(const std::initializer_list<BufferAttrib> &attribs): attribs{attribs}
-	{
-		calculate();
-	}
-
-	void calculate()
-	{
-		Usize offset = 0;
-		for (auto &attrib : attribs) {
-			attrib.offset = offset;
-			offset += size_of(attrib.type);
-		}
-		stride = offset;
-	}
+	Buffer_Layout(const std::initializer_list<Buffer_Attrib> &attribs);
+	void calculate();
 };
 
-class VertexArray {
+class Vertex_Array {
 public:
-	static tl::expected<std::unique_ptr<VertexArray>, std::string> create();
+	static tl::expected<std::unique_ptr<Vertex_Array>, std::string> create();
 	
-	virtual ~VertexArray() = default;
+	virtual ~Vertex_Array() = default;
 	virtual void bind() = 0;
 	virtual void unbind() = 0;
-	virtual void add_vertex_buffer(std::unique_ptr<VertexBuffer> &&vbo) = 0;
-	virtual void set_index_buffer(std::unique_ptr<IndexBuffer> &&ebo) = 0;
-	virtual const std::unique_ptr<IndexBuffer> &index_buffer() const = 0;
+	virtual void add_vertex_buffer(std::unique_ptr<Vertex_Buffer> &&vbo) = 0;
+	virtual void set_index_buffer(std::unique_ptr<Index_Buffer> &&ebo) = 0;
+	virtual const std::unique_ptr<Index_Buffer> &index_buffer() const = 0;
 	virtual Usize vertex_count() const = 0;
 };
 
-class VertexBuffer {
+class Vertex_Buffer {
 public:
-	static tl::expected<std::unique_ptr<VertexBuffer>, std::string> create(
-		const F32 *vertices, Usize count);
+	static tl::expected<std::unique_ptr<Vertex_Buffer>, std::string>
+	create(const F32 *vertices, Usize count);
 
-	virtual ~VertexBuffer() = default;
+	virtual ~Vertex_Buffer() = default;
 	virtual void bind() = 0;
 	virtual void unbind() = 0;
 	virtual void set_layout(const std::unique_ptr<Shader> &shader,
-		const BufferLayout &layout) = 0;
-	virtual const BufferLayout &layout() const = 0;
+		const Buffer_Layout &layout) = 0;
+	virtual const Buffer_Layout &layout() const = 0;
 	virtual Usize size() const = 0;
 };
 
-class IndexBuffer {
+class Index_Buffer {
 public:
-	static tl::expected<std::unique_ptr<IndexBuffer>, std::string> create(
-		const U32 *indices, Usize count);	
+	static tl::expected<std::unique_ptr<Index_Buffer>, std::string>
+	create(const U32 *indices, Usize count);	
 
-	virtual ~IndexBuffer() = default;
+	virtual ~Index_Buffer() = default;
 	virtual void bind() = 0;
 	virtual void unbind() = 0;
 	virtual Usize count() const = 0;
@@ -183,14 +150,15 @@ public:
 
 class Shader {
 public:
-	static tl::expected<std::unique_ptr<Shader>, std::string> create(
-		const std::string &vertex_source, const std::string &fragment_source);
+	static tl::expected<std::unique_ptr<Shader>, std::string>
+	create(const std::string &vertex_source, const std::string &fragment_source);
 
 	virtual ~Shader() = default;
 	virtual void bind() = 0;
 	virtual void unbind() = 0;
 	virtual void *handle() const = 0;
-	virtual void upload_uniform(const std::string &name, const glm::mat4 &matrix) = 0;
+	virtual void
+	upload_uniform(const std::string &name, const glm::mat4 &matrix) = 0;
 };
 
 }

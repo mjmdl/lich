@@ -9,10 +9,10 @@
 
 namespace lich {
 
-class GlfwWindow final: public Window {
+class Glfw_Window final : public Window {
 public:
-	GlfwWindow(const WindowSpec &window_spec = {});
-	~GlfwWindow() override;
+	Glfw_Window(const Window_Spec &window_spec = {});
+	~Glfw_Window() override;
 
 	void update() override;
 	void clear() override;
@@ -34,19 +34,19 @@ public:
 	void set_size(U32 width, U32 height) override;
 	std::pair<U32, U32> screen_size() const override;
 
-	void set_event_callback(const EventCallback &callback) override;
+	void set_event_callback(const Event_Callback &callback) override;
 	void move_to_center() override;
 
 private:
 	static void glfw_error_callback_(int error, const char *description);
-	static GlfwWindow *window_self_(GLFWwindow *handle);
+	static Glfw_Window *window_self_(GLFWwindow *handle);
 
 	static void glfw_close_callback_(GLFWwindow *window);
 	static void glfw_focus_callback_(GLFWwindow *window, int focused);
 	static void glfw_pos_callback_(GLFWwindow *window, int xpos, int ypos);
 	static void glfw_size_callback_(GLFWwindow *window, int width, int height);
-	static void glfw_key_callback_(GLFWwindow *window, int key, int scancode,
-		int action, int mods);
+	static void glfw_key_callback_(GLFWwindow *window, int key,
+		int scancode, int action, int mods);
 	static void glfw_mouse_button_callback_(GLFWwindow *window, int button,
 		int action, int mods);
 	static void glfw_cursor_pos_callback_(GLFWwindow *window,
@@ -57,11 +57,11 @@ private:
 private:
 	inline static bool glfw_init_ = false;
 	inline static U32 window_count_ = 0;
-	inline static Logger logger_{"lich::GlfwWindow"};
+	inline static Logger logger_{"lich::Glfw_Window"};
 	
 	GLFWwindow *_window;
 	std::string _title;
-	EventCallback _event_callback;
+	Event_Callback _event_callback;
 	bool _success;
 };
 

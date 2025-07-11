@@ -8,20 +8,20 @@
 
 namespace lich {
 
-class GlfwInput final: public Input {
+class Glfw_Input final: public Input {
 public:
 	static void init(GLFWwindow *window);
 
-	GlfwInput(GLFWwindow *window);
+	Glfw_Input(GLFWwindow *window);
 	
 protected:
-	bool _key_down(KeyCode code) override;
-	bool _mouse_down(MouseCode code) override;
+	bool _key_down(Key_Code code) override;
+	bool _mouse_down(Mouse_Code code) override;
 	std::pair<F64, F64> _mouse_pos() override;
 
 private:
-	KeyAction _key(KeyCode code);
-	KeyAction _mouse(MouseCode code);
+	Key_Action _key(Key_Code code);
+	Key_Action _mouse(Mouse_Code code);
 	
 private:
 	GLFWwindow *_window;
