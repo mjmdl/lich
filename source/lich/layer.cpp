@@ -33,7 +33,9 @@ std::unique_ptr<Layer> Layer_Stack::remove(Predicate predicate) {
 	return layer;
 }
 
-void Layer_Stack::update() { for (auto &layer : _layers) layer->update(); }
+void Layer_Stack::update(Timestep timestep) {
+	for (auto &layer : _layers) layer->update(timestep);
+}
 
 void Layer_Stack::handle(Event &event) {
 	for (auto &layer : _layers | std::views::reverse) {

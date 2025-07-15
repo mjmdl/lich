@@ -1,17 +1,18 @@
 #include "app.hpp"
 #include "log.hpp"
+#include "platform.hpp"
 #include "render.hpp"
 
 namespace lich {
 
 App::App(const App_Spec &app_spec, const Console_Args &console_args) :
 	_window{nullptr}, _app_spec{app_spec}, _console_args{console_args},
-	_success{false}, _running{false}
+	_last_frame_time{0.0f}, _success{false}, _running{false}
 {
 	if (_app_spec.name != "Lich Engine") {
 		Logger::client_logger = Logger{_app_spec.name};
 	}
-
+	
 	_window = Window::create(Window_Spec{
 		app_spec.name, app_spec.width, app_spec.height});
 	if (not _window->success()) return;
@@ -29,12 +30,16 @@ int App::run() {
 
 	_running = true;
 	while (_running) {
+		float time = Platform::get_time();
+		Timestep timestep{time - _last_frame_time};
+		_last_frame_time = time;
+		
 		Render_Command::set_clear_color(glm::vec4{0.5f, 0.2f, 0.5f, 1.0f});
 		Render_Command::clear();
 
 		Renderer::begin_scene();
 
-		_layer_stack.update();
+		_layer_stack.update(timestep);
 		
 		Renderer::end_scene();
 		

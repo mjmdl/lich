@@ -3,6 +3,7 @@
 
 #include "event.hpp"
 #include "log.hpp"
+#include "util.hpp"
 
 namespace lich {
 
@@ -13,7 +14,7 @@ public:
 
 	virtual void init() {}
 	virtual void quit() {}
-	virtual void update() {}
+	virtual void update([[maybe_unused]] Timestep timestep) {}
 	virtual void handle([[maybe_unused]] Event &event) {}
 
 	const std::string &name() const;
@@ -33,7 +34,7 @@ public:
 	Usize push_over(std::unique_ptr<Layer> layer);
 	std::unique_ptr<Layer> remove(Predicate predicate);
 
-	void update();
+	void update(Timestep timestep);
 	void handle(Event &event);
 		
 private:

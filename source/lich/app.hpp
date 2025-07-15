@@ -2,6 +2,7 @@
 #define LICH_APP_HPP
 
 #include "layer.hpp"
+#include "util.hpp"
 #include "window.hpp"
 
 namespace lich {
@@ -53,6 +54,7 @@ private:
 	App_Spec _app_spec;
 	Console_Args _console_args;
 	Layer_Stack _layer_stack;
+	float _last_frame_time;
 	bool _success;
 	bool _running;
 };

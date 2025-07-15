@@ -44,7 +44,7 @@ const char *fragment_source_ = R"glsl(
 )glsl";
 
 Render_Layer::Render_Layer(float aspect_ratio) :
-	_camera{-1.0f, 1.0f, -1.0f, 1.0f}
+	_camera{-1.0f, 1.0f, -1.0f, 1.0f}, _keys{}
 {
 	using namespace lich;
 
@@ -86,7 +86,36 @@ Render_Layer::Render_Layer(float aspect_ratio) :
 	_vertex_array->set_index_buffer(std::move(ebo_result.value()));
 }
 
-void Render_Layer::update() {
+void Render_Layer::update([[maybe_unused]] lich::Timestep timestep) {
+	glm::vec3 direction{};
+	if (_keys[W]) direction.y += 1.0f;
+	if (_keys[A]) direction.x -= 1.0f;
+	if (_keys[S]) direction.y -= 1.0f;
+	if (_keys[D]) direction.x += 1.0f;
+	if (direction != glm::vec3{0}) {
+		direction = glm::normalize(direction);
+	
+		float angle = _camera.rotation();
+		glm::mat2 rotation_matrix{
+			{ std::cos(angle), std::sin(angle)},
+			{-std::sin(angle), std::cos(angle)}};
+		glm::vec2 rotated = rotation_matrix * glm::vec2{direction.x, direction.y};
+		direction = {rotated.x, rotated.y, 0.0f};
+	
+		float camera_speed = 1.0f * timestep.seconds();
+		auto new_pos = _camera.position() + direction * camera_speed;
+		_camera.set_position(new_pos);
+	}
+
+	float rotation = 0;
+	if (_keys[Q]) rotation -= -1;
+	if (_keys[E]) rotation += -1;
+	if (rotation != 0) {
+		float degrees_per_frame = 1.0f * timestep.seconds();
+		float angle = _camera.rotation() + rotation * degrees_per_frame;
+		_camera.set_rotation(angle);
+	}
+	
 	_shader->bind();
 	_shader->upload_uniform("u_view_projection", _camera.view_projection());
 	lich::Renderer::submit(_vertex_array);
@@ -103,17 +132,24 @@ void Render_Layer::handle(lich::Event &event) {
 
 	dispatcher.handle<lich::Key_Press_Event>([this] (const auto &press) -> bool {
 		using namespace lich;
-		
-		glm::vec3 offset{0};		
-		if (press.code == Key_Code::W) offset.y += 1.0f;
-		if (press.code == Key_Code::A) offset.x -= 1.0f;
-		if (press.code == Key_Code::S) offset.y -= 1.0f;
-		if (press.code == Key_Code::D) offset.x += 1.0f;
+		if (press.repeat != 0) return false;
+		if (press.code == Key_Code::W) _keys[W] = true;
+		if (press.code == Key_Code::A) _keys[A] = true;
+		if (press.code == Key_Code::S) _keys[S] = true;
+		if (press.code == Key_Code::D) _keys[D] = true;
+		if (press.code == Key_Code::E) _keys[E] = true;
+		if (press.code == Key_Code::Q) _keys[Q] = true;
+		return false;
+	});
 
-		float camera_speed = 0.1f;
-		auto new_pos = _camera.position() + offset * camera_speed;
-		_camera.set_position(new_pos);
-		
+	dispatcher.handle<lich::Key_Release_Event>([this] (const auto &release) -> bool {
+		using namespace lich;
+		if (release.code == Key_Code::W) _keys[W] = false;
+		if (release.code == Key_Code::A) _keys[A] = false;
+		if (release.code == Key_Code::S) _keys[S] = false;
+		if (release.code == Key_Code::D) _keys[D] = false;
+		if (release.code == Key_Code::E) _keys[E] = false;
+		if (release.code == Key_Code::Q) _keys[Q] = false;
 		return false;
 	});
 }

@@ -11,7 +11,7 @@ public:
 
 	void init() override;
 	void quit() override;
-	void update() override;
+	void update(Timestep timestep) override;
 	void handle(Event &event) override;
 
 private:

@@ -9,7 +9,7 @@ namespace sand {
 class Events_Logger_Layer final : public lich::Layer {
 public:
 	Events_Logger_Layer();
-	void update() override;
+	void update(lich::Timestep timestep) override;
 	void handle(lich::Event &event) override;
 	
 private:

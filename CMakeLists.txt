@@ -16,6 +16,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 add_library(lich STATIC
 	source/lich/app.cpp
 	source/lich/glfw_input.cpp
+	source/lich/glfw_platform.cpp
 	source/lich/glfw_window.cpp
 	source/lich/imgui.cpp
 	source/lich/layer.cpp

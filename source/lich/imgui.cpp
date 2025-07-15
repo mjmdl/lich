@@ -34,7 +34,7 @@ void Imgui_Layer::quit() {
 	ImGui::DestroyContext();
 }
 
-void Imgui_Layer::update() {
+void Imgui_Layer::update([[maybe_unused]] Timestep timestep) {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
