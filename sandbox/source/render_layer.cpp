@@ -94,10 +94,26 @@ void Render_Layer::update() {
 
 void Render_Layer::handle(lich::Event &event) {
 	lich::Event_Dispatcher dispatcher{event};
+
 	dispatcher.handle<lich::Window_Size_Event>([this] (const auto &size) -> bool {
-		float aspect_ratio = static_cast<float>(size.width) /
-			static_cast<float>(size.height);
+		float aspect_ratio = (float)size.width / (float)size.height;
 		_camera.set_aspect_ratio(aspect_ratio);
+		return false;
+	});
+
+	dispatcher.handle<lich::Key_Press_Event>([this] (const auto &press) -> bool {
+		using namespace lich;
+		
+		glm::vec3 offset{0};		
+		if (press.code == Key_Code::W) offset.y += 1.0f;
+		if (press.code == Key_Code::A) offset.x -= 1.0f;
+		if (press.code == Key_Code::S) offset.y -= 1.0f;
+		if (press.code == Key_Code::D) offset.x += 1.0f;
+
+		float camera_speed = 0.1f;
+		auto new_pos = _camera.position() + offset * camera_speed;
+		_camera.set_position(new_pos);
+		
 		return false;
 	});
 }

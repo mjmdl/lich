@@ -29,6 +29,7 @@ void Renderer::submit(const std::unique_ptr<Vertex_Array> &vertex_array) {
 Orthographic_Camera_2d::Orthographic_Camera_2d(
 	float left, float right, float bottom, float top) :
 	_projection{glm::ortho(left, right, bottom, top, -1.0f, 1.0f)}, _view{1.0f},
+	_position{0}, _rotation{0},
 	_left{left}, _right{right}, _bottom{bottom}, _top{top}
 {
 	_view_projection = _projection * _view;
