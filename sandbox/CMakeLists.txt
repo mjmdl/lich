@@ -7,12 +7,23 @@ project(
 		LANGUAGES CXX
 )
 
-add_executable(
-	sandbox
+set(
+	SOURCE_FILES
 		source/events_logger_layer.cpp
 		source/game.cpp
 		source/main.cpp
 		source/render_layer.cpp
+)	
+set(
+	HEADER_FILES
+		source/events_logger_layer.hpp
+		source/game.hpp
+		source/render_layer.hpp
+)
+add_executable(
+	sandbox
+		${SOURCE_FILES}
+		${HEADER_FILES}
 )
 
 target_include_directories(sandbox PRIVATE source)

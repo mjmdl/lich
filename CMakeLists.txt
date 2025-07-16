@@ -15,8 +15,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/binaries)
 
-add_library(
-	lich STATIC
+set(
+	SOURCE_FILES
 		source/lich/app.cpp
 		source/lich/glfw_input.cpp
 		source/lich/glfw_platform.cpp
@@ -26,6 +26,27 @@ add_library(
 		source/lich/log.cpp
 		source/lich/opengl_render.cpp
 		source/lich/render.cpp
+)	
+set(
+	HEADER_FILES
+		source/lich/app.hpp
+		source/lich/event.hpp
+		source/lich/glfw_input.hpp
+		source/lich/glfw_window.hpp
+		source/lich/imgui.hpp
+		source/lich/input.hpp
+		source/lich/layer.hpp
+		source/lich/log.hpp
+		source/lich/opengl_render.hpp
+		source/lich/platform.hpp
+		source/lich/render.hpp
+		source/lich/util.hpp
+		source/lich/window.hpp
+)
+add_library(
+	lich STATIC
+		${SOURCE_FILES}
+		${HEADER_FILES}
 )
 
 target_include_directories(
