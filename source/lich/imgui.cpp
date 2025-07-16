@@ -9,7 +9,8 @@
 namespace lich {
 
 Imgui_Layer::Imgui_Layer(void *window_handle) :
-	Layer{"lich::Imgui_Layer"}, _window_handle{window_handle} {}
+	Layer{"lich::Imgui_Layer"},
+	_window_handle{window_handle} {}
 
 void Imgui_Layer::init() {
 	_show_demo_window = true;
@@ -24,7 +25,9 @@ void Imgui_Layer::init() {
 	ImGui::StyleColorsDark();
     
 	ImGui_ImplGlfw_InitForOpenGL(
-		static_cast<GLFWwindow *>(_window_handle), true);
+		static_cast<GLFWwindow *>(_window_handle),
+		true
+	);
 	ImGui_ImplOpenGL3_Init("#version 460");
 }
 
@@ -53,7 +56,8 @@ void Imgui_Layer::handle(Event &event) {
 				return true;
 			}
 			return false;
-		});
+		}
+	);
 }
 
 }

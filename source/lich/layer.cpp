@@ -2,11 +2,17 @@
 
 namespace lich {
 
-const std::string &Layer::name() const { return _name; }
+const std::string &Layer::name() const {
+	return _name;
+}
 
-Layer_Stack::Layer_Stack() : _layers{}, _insert{_layers.begin()} {}
+Layer_Stack::Layer_Stack() :
+	_layers{},
+	_insert{_layers.begin()} {}
 
-Layer_Stack::~Layer_Stack() { for (auto &layer : _layers) layer->quit(); }
+Layer_Stack::~Layer_Stack() {
+	for (auto &layer : _layers) layer->quit();
+}
 
 Usize Layer_Stack::push(std::unique_ptr<Layer> layer) {
 	layer->init();

@@ -15,8 +15,8 @@ set(SPDLOG_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 add_subdirectory(spdlog)
 target_compile_definitions(
 	spdlog PRIVATE
-	SPDLOG_COMPILED_LIB=1
-	SPDLOG_LEVEL_NAMES={\"TRACE\",\"DEBUG\",\"INFO\",\"WARN\",\"ERROR\",\"FATAL\",\"OFF\"}
-	SPDLOG_SHORT_LEVEL_NAMES={\"T\",\"D\",\"I\",\"W\",\"E\",\"F\",\"O\"}
-	SPDLOG_DISABLE_DEFAULT_LOGGER=1
+		SPDLOG_COMPILED_LIB=1
+		SPDLOG_LEVEL_NAMES={\"TRACE\",\"DEBUG\",\"INFO\",\"WARN\",\"ERROR\",\"FATAL\",\"OFF\"}
+		SPDLOG_SHORT_LEVEL_NAMES={\"T\",\"D\",\"I\",\"W\",\"E\",\"F\",\"O\"}
+		SPDLOG_DISABLE_DEFAULT_LOGGER=1
 )

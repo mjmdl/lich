@@ -152,9 +152,17 @@ enum class Mouse_Code {
 
 class Input {
 public:
-	static bool key_down(Key_Code code) { return singleton_->_key_down(code); }
-	static bool mouse_down(Mouse_Code code) { return singleton_->_mouse_down(code); }
-	static std::pair<F64, F64> mouse_pos() { return singleton_->_mouse_pos(); }
+	static bool key_down(Key_Code code) {
+		return singleton_->_key_down(code);
+	}
+	
+	static bool mouse_down(Mouse_Code code) {
+		return singleton_->_mouse_down(code);
+	}
+	
+	static std::pair<F64, F64> mouse_pos() {
+		return singleton_->_mouse_pos();
+	}
 
 protected:
 	virtual bool _key_down(Key_Code code) = 0;

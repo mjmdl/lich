@@ -9,7 +9,9 @@ namespace lich {
 
 class Layer {
 public:
-	Layer(const std::string &name = "Layer"): _name{name} {}
+	Layer(const std::string &name = "Layer"):
+		_name{name} {}
+	
 	virtual ~Layer() = default;
 
 	virtual void init() {}

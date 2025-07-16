@@ -8,7 +8,15 @@ namespace sand {
 
 class Render_Layer final : public lich::Layer {
 private:
-	enum Key_ { W = 0, A = 1, S = 2, D = 3, Q = 4, E = 5, Count };
+	enum Key_ {
+		W = 0,
+		A = 1,
+		S = 2,
+		D = 3,
+		Q = 4,
+		E = 5,
+		Count
+	};
 
 public:
 	Render_Layer(float aspect_ratio);

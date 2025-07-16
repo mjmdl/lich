@@ -17,6 +17,8 @@ Game::Game(const lich::Console_Args &console_args) :
 	_logger.trace("Hello!");
 }
 
-Game::~Game() { _logger.trace("Goodbye!"); }
+Game::~Game() {
+	_logger.trace("Goodbye!");
+}
 
 }

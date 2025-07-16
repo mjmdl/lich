@@ -55,7 +55,10 @@ public:
 	~Opengl_Vertex_Buffer() override;
 	void bind() override;
 	void unbind() override;
-	void set_layout(const std::unique_ptr<Shader> &shader, const Buffer_Layout &layout) override;
+	void set_layout(
+		const std::unique_ptr<Shader> &shader,
+		const Buffer_Layout &layout
+	) override;
 	const Buffer_Layout &layout() const override;
 	Usize size() const override;
 

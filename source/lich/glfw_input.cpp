@@ -2,8 +2,13 @@
 
 namespace lich {
 
-static int to_glfw_key_code_(Key_Code code) { return static_cast<int>(code); }
-static int to_glfw_mouse_code_(Mouse_Code code) { return static_cast<int>(code); }
+static int to_glfw_key_code_(Key_Code code) {
+	return static_cast<int>(code);
+}
+
+static int to_glfw_mouse_code_(Mouse_Code code) {
+	return static_cast<int>(code);
+}
 
 static Key_Action from_glfw_key_action_(int action) {
 	switch (action) {
@@ -15,14 +20,16 @@ static Key_Action from_glfw_key_action_(int action) {
 }
 
 void Glfw_Input::init(GLFWwindow *window) {
-	if (not singleton_) singleton_ = std::make_unique<Glfw_Input>(window);
-	else {
+	if (not singleton_) {
+		singleton_ = std::make_unique<Glfw_Input>(window);
+	} else {
 		auto instance = static_cast<Glfw_Input *>(singleton_.get());
 		instance->_window = window;
 	}
 }
 
-Glfw_Input::Glfw_Input(GLFWwindow *window) : _window{window} {}
+Glfw_Input::Glfw_Input(GLFWwindow *window) :
+	_window{window} {}
 
 bool Glfw_Input::_key_down(Key_Code code) {
 	Key_Action action = _key(code);

@@ -4,8 +4,9 @@
 
 namespace sand {
 
-Events_Logger_Layer:: Events_Logger_Layer() :
-	Layer{"Events_Logger_Layer"}, _logger{"sand::Events_Logger_Layer"} {}
+Events_Logger_Layer::Events_Logger_Layer() :
+	Layer{"Events_Logger_Layer"},
+	_logger{"sand::Events_Logger_Layer"} {}
 
 void Events_Logger_Layer::update([[maybe_unused]] lich::Timestep timestep) {
 	const auto [x, y] = lich::Input::mouse_pos();

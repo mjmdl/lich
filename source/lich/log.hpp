@@ -26,8 +26,10 @@ public:
 	static Logger engine_logger;
 	static Logger client_logger;
 
-	Logger(const std::string &name = "Logger",
-		Log_Level level = Log_Level::Trace);
+	Logger(
+		const std::string &name = "Logger",
+		Log_Level level = Log_Level::Trace
+	);
 	const std::string &name() const;
 	Log_Level level() const;
 	void set_level(Log_Level level);

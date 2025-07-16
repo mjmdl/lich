@@ -97,8 +97,12 @@ void Opengl_Renderer_Api::clear() {
 void Opengl_Renderer_Api::
 draw_indexed(const std::unique_ptr<Vertex_Array> &vertex_array) {
 	if (vertex_array->index_buffer()) {
-		glDrawElements(GL_TRIANGLES, vertex_array->index_buffer()->count(),
-			GL_UNSIGNED_INT, NULL);
+		glDrawElements(
+			GL_TRIANGLES,
+			vertex_array->index_buffer()->count(),
+			GL_UNSIGNED_INT,
+			NULL
+		);
 	} else glDrawArrays(GL_TRIANGLES, 0, vertex_array->vertex_count());
 }
 
@@ -115,8 +119,13 @@ Opengl_Vertex_Array::~Opengl_Vertex_Array() {
 	GL_CHECK(glDeleteVertexArrays(1, &_vao));
 }
 
-void Opengl_Vertex_Array::bind() { GL_CHECK(glBindVertexArray(_vao)); }
-void Opengl_Vertex_Array::unbind() { GL_CHECK(glBindVertexArray(0)); }
+void Opengl_Vertex_Array::bind() {
+	GL_CHECK(glBindVertexArray(_vao));
+}
+
+void Opengl_Vertex_Array::unbind() {
+	GL_CHECK(glBindVertexArray(0));
+}
 
 void Opengl_Vertex_Array::add_vertex_buffer(std::unique_ptr<Vertex_Buffer> &&vbo) {
 	GL_CHECK(glBindVertexArray(_vao));
@@ -135,7 +144,13 @@ void Opengl_Vertex_Array::add_vertex_buffer(std::unique_ptr<Vertex_Buffer> &&vbo
 		GLenum type = equivalent_opengl_type(attrib.type);
 		GLenum normalized = GL_FALSE;
 		GL_CHECK(glVertexAttribPointer(
-			location, components, type, normalized, stride, (void *)offset));
+			location,
+			components,
+			type,
+			normalized,
+			stride,
+			(void *)offset
+		));
 		offset += size_of(attrib.type);
 		++location;
 	}
@@ -143,8 +158,11 @@ void Opengl_Vertex_Array::add_vertex_buffer(std::unique_ptr<Vertex_Buffer> &&vbo
 	Usize buffer_size = vbo->size();
 	Usize vertex_count = buffer_size / stride;
 	if (_vertex_count != 0 and vertex_count != _vertex_count) {
-		log_warn("Adding a vertex buffer of different number of elements: From {} to {}.",
-			_vertex_count, vertex_count);
+		log_warn(
+			"Adding a vertex buffer of different number of elements: From {} to {}.",
+			_vertex_count,
+			vertex_count
+		);
 	}
 
 	_vertex_count = vertex_count;
@@ -162,25 +180,39 @@ const std::unique_ptr<Index_Buffer> &Opengl_Vertex_Array::index_buffer() const {
 	return _index_buffer;
 }
 
-Usize Opengl_Vertex_Array::vertex_count() const { return _vertex_count; }
+Usize Opengl_Vertex_Array::vertex_count() const {
+	return _vertex_count;
+}
 
 /*
  * class Opengl_Vertex_Buffer
  */
 
 Opengl_Vertex_Buffer::Opengl_Vertex_Buffer(const F32 *vertices, Usize count) :
-	_layout{}, _count{count}
+	_layout{},
+	_count{count}
 {
 	GL_CHECK(glCreateBuffers(1, &_vbo));
 	GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _vbo));
 	GL_CHECK(glBufferData(
-		GL_ARRAY_BUFFER, count * (sizeof *vertices), vertices, GL_STATIC_DRAW));
+		GL_ARRAY_BUFFER,
+		count * (sizeof *vertices),
+		vertices,
+		GL_STATIC_DRAW
+	));
 }
 
-Opengl_Vertex_Buffer::~Opengl_Vertex_Buffer() { GL_CHECK(glDeleteBuffers(1, &_vbo)); }
+Opengl_Vertex_Buffer::~Opengl_Vertex_Buffer() {
+	GL_CHECK(glDeleteBuffers(1, &_vbo));
+}
 
-void Opengl_Vertex_Buffer::bind() { GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _vbo)); }
-void Opengl_Vertex_Buffer::unbind() { GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0)); }
+void Opengl_Vertex_Buffer::bind() {
+	GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, _vbo));
+}
+
+void Opengl_Vertex_Buffer::unbind() {
+	GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, 0));
+}
 
 void Opengl_Vertex_Buffer::
 set_layout(const std::unique_ptr<Shader> &shader, const Buffer_Layout &layout) {
@@ -189,14 +221,20 @@ set_layout(const std::unique_ptr<Shader> &shader, const Buffer_Layout &layout) {
 	for (const auto &attrib : _layout.attribs) {
 		const char *name = attrib.name.c_str();
 		GLint location;
-		GLuint program = static_cast<GLuint>(reinterpret_cast<uintptr_t>(shader->handle()));
+		GLuint program =
+			static_cast<GLuint>(reinterpret_cast<uintptr_t>(shader->handle()));
 		GL_CHECK(location = glGetAttribLocation(program, name));
 		LICH_EXPECT(location >= 0, "Vertex location '{}' is not defined.", name);
 	}
 }
 
-const Buffer_Layout &Opengl_Vertex_Buffer::layout() const { return _layout; }
-Usize Opengl_Vertex_Buffer::size() const { return _count * sizeof (F32); }
+const Buffer_Layout &Opengl_Vertex_Buffer::layout() const {
+	return _layout;
+}
+
+Usize Opengl_Vertex_Buffer::size() const {
+	return _count * sizeof (F32);
+}
 
 /*
  * class OpenglIndex_Buffer
@@ -208,14 +246,28 @@ Opengl_Index_Buffer::Opengl_Index_Buffer(const U32 *indices, Usize count) :
 	GL_CHECK(glCreateBuffers(1, &_ebo));
 	GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
 	GL_CHECK(glBufferData(
-		GL_ELEMENT_ARRAY_BUFFER, count * (sizeof *indices), indices, GL_STATIC_DRAW));
+		GL_ELEMENT_ARRAY_BUFFER,
+		count * (sizeof *indices),
+		indices,
+		GL_STATIC_DRAW
+	));
 }
 
-Opengl_Index_Buffer::~Opengl_Index_Buffer() { GL_CHECK(glDeleteBuffers(1, &_ebo)); }
+Opengl_Index_Buffer::~Opengl_Index_Buffer() {
+	GL_CHECK(glDeleteBuffers(1, &_ebo));
+}
 
-void Opengl_Index_Buffer::bind() { GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo)); }
-void Opengl_Index_Buffer::unbind() { GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)); }
-Usize Opengl_Index_Buffer::count() const { return _count; }
+void Opengl_Index_Buffer::bind() {
+	GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo));
+}
+
+void Opengl_Index_Buffer::unbind() {
+	GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+}
+
+Usize Opengl_Index_Buffer::count() const {
+	return _count;
+}
 
 /*
  * class Opengl_Shader
@@ -249,16 +301,24 @@ compile(const std::string &vertex_source, const std::string &fragment_source) {
 	const GLchar *source = reinterpret_cast<const GLchar *>(vertex_source.c_str());
 	auto vertex = compile_shader_type_(source, GL_VERTEX_SHADER);
 	if (!vertex) {
-		return tl::unexpected{fmt::v11::format(
-			"Failed to compile a GLSL vertex shader: {}", vertex.error())};
+		return tl::unexpected{
+			fmt::v11::format(
+				"Failed to compile a GLSL vertex shader: {}",
+				vertex.error()
+			)
+		};
 	}
 
 	source = reinterpret_cast<const GLchar *>(fragment_source.c_str());
 	auto fragment = compile_shader_type_(source, GL_FRAGMENT_SHADER);
 	if (!fragment) {
 		glDeleteShader(vertex.value());
-		return tl::unexpected{fmt::v11::format(
-			"Failed to compile a GLSL fragment shader: {}", fragment.error())};
+		return tl::unexpected{
+			fmt::v11::format(
+				"Failed to compile a GLSL fragment shader: {}",
+				fragment.error()
+			)
+		};
 	}
 	
 	GLuint program = glCreateProgram();
@@ -279,21 +339,33 @@ compile(const std::string &vertex_source, const std::string &fragment_source) {
 		GL_CHECK(glGetProgramInfoLog(program, length, &length, log.data()));
 		GL_CHECK(glDeleteProgram(program));
 
-		return tl::unexpected{fmt::v11::format(
-			"Failed to link a GLSL program: {}", log)};
+		return tl::unexpected{
+			fmt::v11::format("Failed to link a GLSL program: {}", log)
+		};
 	}
 
 	return std::make_unique<Opengl_Shader>(program);
 }
 
-Opengl_Shader::Opengl_Shader(GLuint program) : _program{program} {}
-Opengl_Shader::~Opengl_Shader() { glDeleteProgram(_program); }
+Opengl_Shader::Opengl_Shader(GLuint program) :
+	_program{program} {}
 
-void Opengl_Shader::bind() { glUseProgram(_program); }
-void Opengl_Shader::unbind() { glUseProgram(0); }
+Opengl_Shader::~Opengl_Shader() {
+	glDeleteProgram(_program);
+}
 
-void Opengl_Shader::
-upload_uniform(const std::string &name, const glm::mat4 &matrix) {
+void Opengl_Shader::bind() {
+	glUseProgram(_program);
+}
+
+void Opengl_Shader::unbind() {
+	glUseProgram(0);
+}
+
+void Opengl_Shader::upload_uniform(
+	const std::string &name,
+	const glm::mat4 &matrix
+) {
 	GL_CHECK(glUseProgram(_program));
 
 	GLint location;

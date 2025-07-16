@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(glad
-	DESCRIPTION "Multi-Language Vulkan/GL/GLES/EGL/GLX/WGL Loader-Generator based on the official specs."
-	VERSION "2.0.8"
-	LANGUAGES C CXX)
+project(
+	glad
+		DESCRIPTION "Multi-Language Vulkan/GL/GLES/EGL/GLX/WGL Loader-Generator based on the official specs."
+		VERSION "2.0.8"
+		LANGUAGES C CXX
+)
 
 add_library(glad STATIC glad/src/glad.c)
 

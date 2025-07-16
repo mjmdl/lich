@@ -22,7 +22,10 @@ void Glfw_Window::glfw_error_callback_(int error, const char *description) {
 }
 
 Glfw_Window::Glfw_Window(const Window_Spec &window_spec) :
-	_window{NULL}, _title{window_spec.title}, _event_callback{}, _success{false}
+	_window{NULL},
+	_title{window_spec.title},
+	_event_callback{},
+	_success{false}
 {
 	if (not glfw_init_) {
 		glfwSetErrorCallback(glfw_error_callback_);
@@ -43,8 +46,13 @@ Glfw_Window::Glfw_Window(const Window_Spec &window_spec) :
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	
-	_window = glfwCreateWindow(window_spec.width, window_spec.height,
-		_title.c_str(), NULL, NULL);
+	_window = glfwCreateWindow(
+		window_spec.width,
+		window_spec.height,
+		_title.c_str(),
+		NULL,
+		NULL
+	);
 	if (_window == NULL) {
 		logger_.fatal("Failed to create a GLFW window!");		
 		return;
@@ -75,26 +83,37 @@ Glfw_Window::~Glfw_Window() {
 	}
 }
 
-void Glfw_Window::present() { glfwSwapBuffers(_window); }
+void Glfw_Window::present() {
+	glfwSwapBuffers(_window);
+}
 
 void Glfw_Window::clear() {
 	glClearColor(0.17f, 0.17f, 0.17f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Glfw_Window::update() { glfwPollEvents(); }
+void Glfw_Window::update() {
+	glfwPollEvents();
+}
 
-bool Glfw_Window::success() const { return _success; }
+bool Glfw_Window::success() const {
+	return _success;
+}
 
-bool Glfw_Window::should_close() const { return glfwWindowShouldClose(_window); }
+bool Glfw_Window::should_close() const {
+	return glfwWindowShouldClose(_window);
+}
 
 bool Glfw_Window::visible() const {
 	return glfwGetWindowAttrib(_window, GLFW_VISIBLE) == GLFW_TRUE;
 }
 
 void Glfw_Window::set_visible(bool visible) {
-	if (visible) glfwShowWindow(_window);
-	else glfwHideWindow(_window);
+	if (visible) {
+		glfwShowWindow(_window);
+	} else {
+		glfwHideWindow(_window);
+	}
 }
 
 bool Glfw_Window::focused() const {
@@ -125,7 +144,9 @@ std::pair<I32, I32> Glfw_Window::pos() const {
 	return {static_cast<I32>(x), static_cast<I32>(y)};
 }
 
-void Glfw_Window::set_pos(I32 x, I32 y) { glfwSetWindowPos(_window, x, y); }
+void Glfw_Window::set_pos(I32 x, I32 y) {
+	glfwSetWindowPos(_window, x, y);
+}
 
 std::pair<U32, U32> Glfw_Window::size() const {
 	int width, height;
@@ -199,9 +220,13 @@ void Glfw_Window::glfw_size_callback_(GLFWwindow *window, int width, int height)
 	self->_event_callback(*self, event);
 }
 
-void Glfw_Window::glfw_key_callback_(GLFWwindow *window, int key,
-	[[maybe_unused]] int scancode, int action, [[maybe_unused]] int mods)
-{
+void Glfw_Window::glfw_key_callback_(
+	GLFWwindow *window,
+	int key,
+	[[maybe_unused]] int scancode,
+	int action,
+	[[maybe_unused]] int mods
+) {
 	auto self = window_self_(window);
 	if (action == GLFW_RELEASE) {
 		Key_Release_Event event{to_our_key_code_(key)};
@@ -212,12 +237,17 @@ void Glfw_Window::glfw_key_callback_(GLFWwindow *window, int key,
 	} else if (action == GLFW_REPEAT) {
 		Key_Press_Event event{to_our_key_code_(key), 1};
 		self->_event_callback(*self, event);
-	} else log_warn("Unknown GLFW window key action: {}", action);
+	} else {
+		log_warn("Unknown GLFW window key action: {}", action);
+	}
 }
 
-void Glfw_Window::glfw_mouse_button_callback_(GLFWwindow *window, int button,
-	int action, [[maybe_unused]] int mods)
-{
+void Glfw_Window::glfw_mouse_button_callback_(
+	GLFWwindow *window,
+	int button,
+	int action,
+	[[maybe_unused]] int mods
+) {
 	auto self = window_self_(window);
 	if (action == GLFW_RELEASE) {
 		Mouse_Release_Event event{to_our_mouse_code_(button)};
@@ -228,18 +258,26 @@ void Glfw_Window::glfw_mouse_button_callback_(GLFWwindow *window, int button,
 	} else if (action == GLFW_REPEAT) {
 		Mouse_Press_Event event{to_our_mouse_code_(button), 1};
 		self->_event_callback(*self, event);
-	} else log_warn("Unknown GLFW window key action: {}", action);
+	} else {
+		log_warn("Unknown GLFW window key action: {}", action);
+	}
 }
 
-void Glfw_Window::
-glfw_cursor_pos_callback_(GLFWwindow *window, double xpos, double ypos) {
+void Glfw_Window::glfw_cursor_pos_callback_(
+	GLFWwindow *window,
+	double xpos,
+	double ypos
+) {
 	auto self = window_self_(window);
 	Mouse_Move_Event event{xpos, ypos};
 	self->_event_callback(*self, event);
 }
 
-void Glfw_Window::
-glfw_scroll_callback_(GLFWwindow *window, double xoffset, double yoffset) {
+void Glfw_Window::glfw_scroll_callback_(
+	GLFWwindow *window,
+	double xoffset,
+	double yoffset
+) {
 	auto self = window_self_(window);
 	Mouse_Scroll_Event event{xoffset, yoffset};
 	self->_event_callback(*self, event);

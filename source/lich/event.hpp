@@ -67,10 +67,18 @@ struct Event_Dispatcher {
 };
 
 #define GEN_EVENT_FUNCTIONS(NAME, VARIANT, FLAGS) \
-	static Event_Variant static_variant() { return VARIANT; } \
-	const char *name() const override { return NAME; } \
-	Event_Variant variant() const override { return VARIANT; } \
-	Event_Flags flags() const override { return FLAGS; }
+	static Event_Variant static_variant() { \
+		return VARIANT; \
+	} \
+	const char *name() const override { \
+		return NAME; \
+	} \
+	Event_Variant variant() const override { \
+		return VARIANT; \
+	} \
+	Event_Flags flags() const override { \
+		return FLAGS; \
+	}
 #define GEN_EVENT_STRING(...) \
 	std::string string() const { \
 		std::stringstream stream; \
@@ -81,47 +89,67 @@ struct Event_Dispatcher {
 struct Window_Close_Event : public Event {
 	Window_Close_Event() = default;
 
-	GEN_EVENT_FUNCTIONS("Window_Close_Event", Event_Variant::Window_Close,
-		(U8)Event_Flag::Window)
+	GEN_EVENT_FUNCTIONS(
+		"Window_Close_Event",
+		Event_Variant::Window_Close,
+		(U8)Event_Flag::Window
+	)
 };
 
 struct Window_Focus_Event : public Event {
 	Window_Focus_Event() = default;
 
-	GEN_EVENT_FUNCTIONS("Window_Focus_Event", Event_Variant::Window_Focus,
-		(U8)Event_Flag::Window)
+	GEN_EVENT_FUNCTIONS(
+		"Window_Focus_Event",
+		Event_Variant::Window_Focus,
+		(U8)Event_Flag::Window
+	)
 };
 
 struct Window_Blur_Event : public Event {
 	Window_Blur_Event() = default;
 
-	GEN_EVENT_FUNCTIONS("Window_Blur_Event", Event_Variant::Window_Blur,
-		(U8)Event_Flag::Window)
+	GEN_EVENT_FUNCTIONS(
+		"Window_Blur_Event",
+		Event_Variant::Window_Blur,
+		(U8)Event_Flag::Window
+	)
 };
 
 struct Window_Size_Event : public Event {
 	U32 width{0};
 	U32 height{0};
 
-	Window_Size_Event(U32 width, U32 height) : width{width}, height{height} {}
+	Window_Size_Event(U32 width, U32 height) :
+		width{width},
+		height{height} {}
 	
 	Window_Size_Event(int width, int height) :
 		Window_Size_Event{static_cast<U32>(width), static_cast<U32>(height)} {}
 
-	GEN_EVENT_FUNCTIONS("Window_Size_Event", Event_Variant::Window_Size,
-		(U8)Event_Flag::Window)
+	GEN_EVENT_FUNCTIONS(
+		"Window_Size_Event",
+		Event_Variant::Window_Size,
+		(U8)Event_Flag::Window
+	)
 	GEN_EVENT_STRING(
-		name() << "{.width = " << width << ", .height = " << height << "}")
+		name() << "{.width = " << width << ", .height = " << height << "}"
+	)
 };
 
 struct Window_Move_Event : public Event {
 	I32 x{0};
 	I32 y{0};
 	
-	Window_Move_Event(I32 x, I32 y) : x{x}, y{y} {}
+	Window_Move_Event(I32 x, I32 y) :
+		x{x},
+		y{y} {}
 
-	GEN_EVENT_FUNCTIONS("Window_Move_Event", Event_Variant::Window_Move,
-		(U8)Event_Flag::Window)
+	GEN_EVENT_FUNCTIONS(
+		"Window_Move_Event",
+		Event_Variant::Window_Move,
+		(U8)Event_Flag::Window
+	)
 	GEN_EVENT_STRING(name() << "{.x = " << x << ", .y = " << y << "}")
 };
 
@@ -129,21 +157,31 @@ struct Key_Press_Event : public Event {
 	Key_Code code{Key_Code::None};
 	U32 repeat{0};
 
-	Key_Press_Event(Key_Code code, U32 repeat = 0) : code{code}, repeat{repeat} {}
+	Key_Press_Event(Key_Code code, U32 repeat = 0) :
+		code{code},
+		repeat{repeat} {}
 
-	GEN_EVENT_FUNCTIONS("Key_Press_Event", Event_Variant::Key_Press,
-		(U8)Event_Flag::Input | (U8)Event_Flag::Key)
+	GEN_EVENT_FUNCTIONS(
+		"Key_Press_Event",
+		Event_Variant::Key_Press,
+		(U8)Event_Flag::Input | (U8)Event_Flag::Key
+	)
 	GEN_EVENT_STRING(
-		name() << "{.code = " << (int)code << ", .repeat = " << repeat << "}")
+		name() << "{.code = " << (int)code << ", .repeat = " << repeat << "}"
+	)
 };
 
 struct Key_Release_Event : public Event {
 	Key_Code code{Key_Code::None};
 
-	Key_Release_Event(Key_Code code) : code{code} {}
+	Key_Release_Event(Key_Code code) :
+		code{code} {}
 
-	GEN_EVENT_FUNCTIONS("Key_Release_Event", Event_Variant::Key_Release,
-		(U8)Event_Flag::Input | (U8)Event_Flag::Key)
+	GEN_EVENT_FUNCTIONS(
+		"Key_Release_Event",
+		Event_Variant::Key_Release,
+		(U8)Event_Flag::Input | (U8)Event_Flag::Key
+	)
 	GEN_EVENT_STRING(name() << "{.code = " << (int)code << "}")
 };
 
@@ -152,12 +190,17 @@ struct Mouse_Press_Event : public Event {
 	U32 repeat{0};
 
 	Mouse_Press_Event(Mouse_Code code, U32 repeat = 0) :
-		code{code}, repeat{repeat} {}
+		code{code},
+		repeat{repeat} {}
 
-	GEN_EVENT_FUNCTIONS("Mouse_Press_Event", Event_Variant::Mouse_Press,
-		(U8)Event_Flag::Input | (U8)Event_Flag::Mouse | (U8)Event_Flag::Mouse_Button)
+	GEN_EVENT_FUNCTIONS(
+		"Mouse_Press_Event",
+		Event_Variant::Mouse_Press,
+		(U8)Event_Flag::Input | (U8)Event_Flag::Mouse | (U8)Event_Flag::Mouse_Button
+	)
 	GEN_EVENT_STRING(
-		name() << "{.code = " << (int)code << ", .repeat = " << repeat << "}")
+		name() << "{.code = " << (int)code << ", .repeat = " << repeat << "}"
+	)
 };
 
 struct Mouse_Release_Event : public Event {
@@ -165,8 +208,11 @@ struct Mouse_Release_Event : public Event {
 
 	Mouse_Release_Event(Mouse_Code code) : code{code} {}
 
-	GEN_EVENT_FUNCTIONS("Mouse_Release_Event", Event_Variant::Mouse_Release,
-		(U8)Event_Flag::Input | (U8)Event_Flag::Mouse | (U8)Event_Flag::Mouse_Button)
+	GEN_EVENT_FUNCTIONS(
+		"Mouse_Release_Event",
+		Event_Variant::Mouse_Release,
+		(U8)Event_Flag::Input | (U8)Event_Flag::Mouse | (U8)Event_Flag::Mouse_Button
+	)
 	GEN_EVENT_STRING(name() << "{.code = " << (int)code << "}")
 };
 
@@ -174,10 +220,15 @@ struct Mouse_Move_Event : public Event {
 	F64 x{0};
 	F64 y{0};
 
-	Mouse_Move_Event(F64 x, F64 y) : x{x}, y{y} {}
+	Mouse_Move_Event(F64 x, F64 y) :
+		x{x},
+		y{y} {}
 
-	GEN_EVENT_FUNCTIONS("Mouse_Move_Event", Event_Variant::Mouse_Move,
-		(U8)Event_Flag::Input | (U8)Event_Flag::Mouse)
+	GEN_EVENT_FUNCTIONS(
+		"Mouse_Move_Event",
+		Event_Variant::Mouse_Move,
+		(U8)Event_Flag::Input | (U8)Event_Flag::Mouse
+	)
 	GEN_EVENT_STRING(name() << "{.x = " << x << ", .y = " << y << "}")
 };
 
@@ -185,10 +236,15 @@ struct Mouse_Scroll_Event : public Event {
 	F64 x{0};
 	F64 y{0};
 
-	Mouse_Scroll_Event(F64 x, F64 y) : x{x}, y{y} {}
+	Mouse_Scroll_Event(F64 x, F64 y) :
+		x{x},
+		y{y} {}
 
-	GEN_EVENT_FUNCTIONS("Mouse_Scroll_Event", Event_Variant::Mouse_Scroll,
-		(U8)Event_Flag::Input | (U8)Event_Flag::Mouse)
+	GEN_EVENT_FUNCTIONS(
+		"Mouse_Scroll_Event",
+		Event_Variant::Mouse_Scroll,
+		(U8)Event_Flag::Input | (U8)Event_Flag::Mouse
+	)
 	GEN_EVENT_STRING(name() << "{.x = " << x << ", .y = " << y << "}")
 };
 

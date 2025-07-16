@@ -22,9 +22,13 @@ Logger::Logger(const std::string &name, Log_Level level) {
 	_logger->set_level(to_spdlog_level_(level));
 }
 
-const std::string &Logger::name() const { return _logger->name(); }
+const std::string &Logger::name() const {
+	return _logger->name();
+}
 
-Log_Level Logger::level() const { return to_our_level_(_logger->level()); }
+Log_Level Logger::level() const {
+	return to_our_level_(_logger->level());
+}
 
 void Logger::set_level(Log_Level level) {
 	_logger->set_level(to_spdlog_level_(level));

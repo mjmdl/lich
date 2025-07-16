@@ -45,14 +45,29 @@ private:
 	static void glfw_focus_callback_(GLFWwindow *window, int focused);
 	static void glfw_pos_callback_(GLFWwindow *window, int xpos, int ypos);
 	static void glfw_size_callback_(GLFWwindow *window, int width, int height);
-	static void glfw_key_callback_(GLFWwindow *window, int key,
-		int scancode, int action, int mods);
-	static void glfw_mouse_button_callback_(GLFWwindow *window, int button,
-		int action, int mods);
-	static void glfw_cursor_pos_callback_(GLFWwindow *window,
-		double xpos, double ypos);
-	static void glfw_scroll_callback_(GLFWwindow *window,
-		double xoffset, double yoffset);
+	static void glfw_key_callback_(
+		GLFWwindow *window,
+		int key,
+		int scancode,
+		int action,
+		int mods
+	);
+	static void glfw_mouse_button_callback_(
+		GLFWwindow *window,
+		int button,
+		int action,
+		int mods
+	);
+	static void glfw_cursor_pos_callback_(
+		GLFWwindow *window,
+		double xpos,
+		double ypos
+	);
+	static void glfw_scroll_callback_(
+		GLFWwindow *window,
+		double xoffset,
+		double yoffset
+	);
 	
 private:
 	inline static bool glfw_init_ = false;
