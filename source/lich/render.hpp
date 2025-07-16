@@ -63,17 +63,17 @@ private:
 	void _recalculate_view_matrix();
 	
 private:
-	glm::mat4 _projection;
-	glm::mat4 _view;
-	glm::mat4 _view_projection;
+	glm::mat4 _projection{};
+	glm::mat4 _view{};
+	glm::mat4 _view_projection{};
 
-	glm::vec3 _position;
-	float _rotation;
+	glm::vec3 _position{};
+	float _rotation{0.0f};
 	
-	float _left;
-	float _right;
-	float _bottom;
-	float _top;
+	float _left{0.0f};
+	float _right{0.0f};
+	float _bottom{0.0f};
+	float _top{0.0f};
 };
 
 enum class Shader_Data_Type {
@@ -95,16 +95,16 @@ Usize component_count_of(Shader_Data_Type type);
 Usize size_of(Shader_Data_Type type);
 
 struct Buffer_Attrib {
-	std::string name;
-	Shader_Data_Type type;
-	Usize offset;
+	std::string name{};
+	Shader_Data_Type type{Shader_Data_Type::None};
+	Usize offset{0};
 
 	Buffer_Attrib(Shader_Data_Type type, const std::string &name);
 };
 
 struct Buffer_Layout {
-	std::vector<Buffer_Attrib> attribs;
-	Usize stride;
+	std::vector<Buffer_Attrib> attribs{};
+	Usize stride{0};
 
 	Buffer_Layout(const std::initializer_list<Buffer_Attrib> &attribs);
 	void calculate();

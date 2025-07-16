@@ -12,7 +12,7 @@ public:
 	virtual ~Game();
 
 private:
-	lich::Logger _logger;
+	lich::Logger _logger{};
 };
 
 }

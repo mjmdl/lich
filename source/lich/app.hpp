@@ -51,12 +51,12 @@ protected:
 	std::unique_ptr<Window> _window;
 
 private:
-	App_Spec _app_spec;
-	Console_Args _console_args;
-	Layer_Stack _layer_stack;
-	float _last_frame_time;
-	bool _success;
-	bool _running;
+	App_Spec _app_spec{};
+	Console_Args _console_args{};
+	Layer_Stack _layer_stack{};
+	float _last_frame_time{0.0f};
+	bool _success{false};
+	bool _running{false};
 };
 
 }

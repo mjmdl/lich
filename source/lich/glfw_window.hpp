@@ -59,10 +59,10 @@ private:
 	inline static U32 window_count_ = 0;
 	inline static Logger logger_{"lich::Glfw_Window"};
 	
-	GLFWwindow *_window;
-	std::string _title;
-	Event_Callback _event_callback;
-	bool _success;
+	GLFWwindow *_window{NULL};
+	std::string _title{};
+	Event_Callback _event_callback{nullptr};
+	bool _success{false};
 };
 
 }

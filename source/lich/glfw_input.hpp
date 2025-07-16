@@ -24,7 +24,7 @@ private:
 	Key_Action _mouse(Mouse_Code code);
 	
 private:
-	GLFWwindow *_window;
+	GLFWwindow *_window{NULL};
 };
 
 }

@@ -15,8 +15,8 @@ public:
 	void handle(Event &event) override;
 
 private:
-	void *_window_handle;
-	bool _show_demo_window;
+	void *_window_handle{NULL};
+	bool _show_demo_window{false};
 };
 
 }

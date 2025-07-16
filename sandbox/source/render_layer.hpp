@@ -16,10 +16,10 @@ public:
 	void handle(lich::Event &event) override;
 
 private:
-	std::unique_ptr<lich::Vertex_Array> _vertex_array;
-	std::unique_ptr<lich::Shader> _shader;
-	lich::Orthographic_Camera_2d _camera;
-	bool _keys[Count];
+	std::unique_ptr<lich::Vertex_Array> _vertex_array{nullptr};
+	std::unique_ptr<lich::Shader> _shader{nullptr};
+	lich::Orthographic_Camera_2d _camera{0.0f, 0.0f, 0.0f, 0.0f};
+	bool _keys[Count]{};
 };
 
 }

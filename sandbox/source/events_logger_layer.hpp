@@ -13,9 +13,9 @@ public:
 	void handle(lich::Event &event) override;
 	
 private:
-	lich::Logger _logger;
-	lich::F64 _mouse_x;
-	lich::F64 _mouse_y;
+	lich::Logger _logger{};
+	lich::F64 _mouse_x{0.0};
+	lich::F64 _mouse_y{0.0};
 };
 
 }

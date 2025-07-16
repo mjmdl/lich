@@ -43,10 +43,10 @@ public:
 	Usize vertex_count() const override;
 
 private:
-	std::vector<std::unique_ptr<Vertex_Buffer>> _vertex_buffers;
-	std::unique_ptr<Index_Buffer> _index_buffer;
-	Usize _vertex_count;
-	GLuint _vao;
+	std::vector<std::unique_ptr<Vertex_Buffer>> _vertex_buffers{};
+	std::unique_ptr<Index_Buffer> _index_buffer{nullptr};
+	Usize _vertex_count{0};
+	GLuint _vao{0};
 };
 
 class Opengl_Vertex_Buffer final : public Vertex_Buffer {
@@ -60,9 +60,9 @@ public:
 	Usize size() const override;
 
 private:
-	Buffer_Layout _layout;
-	Usize _count;
-	GLuint _vbo;
+	Buffer_Layout _layout{};
+	Usize _count{0};
+	GLuint _vbo{0};
 };
 
 class Opengl_Index_Buffer final : public Index_Buffer {
@@ -74,8 +74,8 @@ public:
 	Usize count() const override;
 
 private:
-	GLuint _ebo;
-	Usize _count;
+	GLuint _ebo{0};
+	Usize _count{0};
 };
 
 class Opengl_Shader final : public Shader {
@@ -91,7 +91,7 @@ public:
 	void *handle() const override;
 	
 private:
-	GLuint _program;
+	GLuint _program{0};
 };
 
 }

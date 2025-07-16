@@ -20,7 +20,7 @@ public:
 	const std::string &name() const;
 	
 private:
-	std::string _name;
+	std::string _name{};
 };
 
 class Layer_Stack {
@@ -38,8 +38,8 @@ public:
 	void handle(Event &event);
 		
 private:
-	std::vector<std::unique_ptr<Layer>> _layers;
-	std::vector<std::unique_ptr<Layer>>::iterator _insert;
+	std::vector<std::unique_ptr<Layer>> _layers{};
+	std::vector<std::unique_ptr<Layer>>::iterator _insert{};
 };
 
 template<typename Type>

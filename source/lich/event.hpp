@@ -100,8 +100,8 @@ struct Window_Blur_Event : public Event {
 };
 
 struct Window_Size_Event : public Event {
-	U32 width;
-	U32 height;
+	U32 width{0};
+	U32 height{0};
 
 	Window_Size_Event(U32 width, U32 height) : width{width}, height{height} {}
 	
@@ -115,8 +115,8 @@ struct Window_Size_Event : public Event {
 };
 
 struct Window_Move_Event : public Event {
-	I32 x;
-	I32 y;
+	I32 x{0};
+	I32 y{0};
 	
 	Window_Move_Event(I32 x, I32 y) : x{x}, y{y} {}
 
@@ -126,8 +126,8 @@ struct Window_Move_Event : public Event {
 };
 
 struct Key_Press_Event : public Event {
-	Key_Code code;
-	U32 repeat;
+	Key_Code code{Key_Code::None};
+	U32 repeat{0};
 
 	Key_Press_Event(Key_Code code, U32 repeat = 0) : code{code}, repeat{repeat} {}
 
@@ -138,7 +138,7 @@ struct Key_Press_Event : public Event {
 };
 
 struct Key_Release_Event : public Event {
-	Key_Code code;
+	Key_Code code{Key_Code::None};
 
 	Key_Release_Event(Key_Code code) : code{code} {}
 
@@ -148,8 +148,8 @@ struct Key_Release_Event : public Event {
 };
 
 struct Mouse_Press_Event : public Event {
-	Mouse_Code code;
-	U32 repeat;
+	Mouse_Code code{Mouse_Code::None};
+	U32 repeat{0};
 
 	Mouse_Press_Event(Mouse_Code code, U32 repeat = 0) :
 		code{code}, repeat{repeat} {}
@@ -161,7 +161,7 @@ struct Mouse_Press_Event : public Event {
 };
 
 struct Mouse_Release_Event : public Event {
-	Mouse_Code code;
+	Mouse_Code code{Mouse_Code::None};
 
 	Mouse_Release_Event(Mouse_Code code) : code{code} {}
 
@@ -171,8 +171,8 @@ struct Mouse_Release_Event : public Event {
 };
 
 struct Mouse_Move_Event : public Event {
-	F64 x;
-	F64 y;
+	F64 x{0};
+	F64 y{0};
 
 	Mouse_Move_Event(F64 x, F64 y) : x{x}, y{y} {}
 
@@ -182,8 +182,8 @@ struct Mouse_Move_Event : public Event {
 };
 
 struct Mouse_Scroll_Event : public Event {
-	F64 x;
-	F64 y;
+	F64 x{0};
+	F64 y{0};
 
 	Mouse_Scroll_Event(F64 x, F64 y) : x{x}, y{y} {}
 

@@ -162,7 +162,7 @@ protected:
 	virtual std::pair<F64, F64> _mouse_pos() = 0;
 
 protected:
-	inline static std::unique_ptr<Input> singleton_;
+	inline static std::unique_ptr<Input> singleton_{nullptr};
 };
 
 }

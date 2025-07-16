@@ -40,7 +40,7 @@ public:
 	GEN_MEMBER_FUNCTION(fatal, critical)
 	
 private:
-	std::unique_ptr<spdlog::logger> _logger;
+	std::unique_ptr<spdlog::logger> _logger{};
 };
 
 #ifdef LICH_COMPILE_STEP
