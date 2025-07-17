@@ -24,8 +24,13 @@ set(
 		source/lich/imgui.cpp
 		source/lich/layer.cpp
 		source/lich/log.cpp
+		source/lich/opengl_buffer.cpp
 		source/lich/opengl_render.cpp
+		source/lich/opengl_shader.cpp
+		source/lich/render_buffer.cpp
+		source/lich/render_camera.cpp
 		source/lich/render.cpp
+		source/lich/render_shader.cpp
 )	
 set(
 	HEADER_FILES
@@ -37,9 +42,16 @@ set(
 		source/lich/input.hpp
 		source/lich/layer.hpp
 		source/lich/log.hpp
+		source/lich/opengl_buffer.hpp
+		source/lich/opengl.hpp
 		source/lich/opengl_render.hpp
+		source/lich/opengl_shader.hpp
+		source/lich/pch.hpp
 		source/lich/platform.hpp
+		source/lich/render_buffer.hpp
+		source/lich/render_camera.hpp
 		source/lich/render.hpp
+		source/lich/render_shader.hpp
 		source/lich/util.hpp
 		source/lich/window.hpp
 )

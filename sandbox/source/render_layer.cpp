@@ -1,3 +1,5 @@
+#include <lich/render.hpp>
+
 #include "render_layer.hpp"
 
 namespace sand {

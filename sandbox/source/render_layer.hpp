@@ -2,7 +2,8 @@
 #define SAND_RENDER_LAYER_HPP
 
 #include <lich/layer.hpp>
-#include <lich/render.hpp>
+#include <lich/render_camera.hpp>
+#include <lich/render_buffer.hpp>
 
 namespace sand {
 
