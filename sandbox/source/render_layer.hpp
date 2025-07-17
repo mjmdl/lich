@@ -11,11 +11,15 @@ class Render_Layer final : public lich::Layer {
 private:
 	enum Key_ {
 		W = 0,
-		A = 1,
-		S = 2,
-		D = 3,
-		Q = 4,
-		E = 5,
+		A,
+		S,
+		D,
+		Q,
+		E,
+		Left,
+		Right,
+		Up,
+		Down,
 		Count
 	};
 
@@ -28,6 +32,7 @@ private:
 	std::unique_ptr<lich::Vertex_Array> _vertex_array{nullptr};
 	std::unique_ptr<lich::Shader> _shader{nullptr};
 	lich::Orthographic_Camera_2d _camera{0.0f, 0.0f, 0.0f, 0.0f};
+	glm::vec3 _square_pos{};
 	bool _keys[Count]{};
 };
 

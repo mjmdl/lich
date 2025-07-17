@@ -2,6 +2,7 @@
 #define LICH_RENDER_HPP
 
 #include "render_buffer.hpp"
+#include "render_camera.hpp"
 
 namespace lich {
 
@@ -32,11 +33,23 @@ private:
 	static Renderer_Api *renderer_api_;
 };
 
+struct Scene_Data {
+	glm::mat4 view_projection{0.0f};
+};
+
 class Renderer {
 public:
 	static void begin_scene();
 	static void end_scene();
-	static void submit(const std::unique_ptr<Vertex_Array> &vertex_array);
+	static void submit(const lich::Orthographic_Camera_2d &camera);
+	static void submit(
+		const std::unique_ptr<Shader> &shader,
+		const std::unique_ptr<Vertex_Array> &vertex_array,
+		const glm::mat4 &transform = glm::mat4{1.0f}
+	);
+
+private:
+	inline static Scene_Data scene_data_{};
 };
 
 }

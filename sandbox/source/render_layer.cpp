@@ -1,3 +1,4 @@
+#include <glm/gtc/matrix_transform.hpp>
 #include <lich/render.hpp>
 
 #include "render_layer.hpp"
@@ -28,9 +29,10 @@ const char *vertex_source_ = R"glsl(
 	out vec3 v_color;
 
 	uniform mat4 u_view_projection;
+	uniform mat4 u_transform;
 
 	void main() {
-		gl_Position = u_view_projection * vec4(pos.xy, 0, 1);
+		gl_Position = u_view_projection * u_transform * vec4(pos.xy, 0, 1);
 		v_color     = color;
 	}
 )glsl";
@@ -46,11 +48,11 @@ const char *fragment_source_ = R"glsl(
 )glsl";
 
 Render_Layer::Render_Layer(float aspect_ratio) :
-	_camera{-1.0f, 1.0f, -1.0f, 1.0f},
+	_camera{-2.0f, 2.0f, -2.0f, 2.0f},
 	_keys{}
 {
 	using namespace lich;
-
+	
 	_camera.set_aspect_ratio(aspect_ratio);
 
 	auto vao_result = Vertex_Array::create();
@@ -73,8 +75,8 @@ Render_Layer::Render_Layer(float aspect_ratio) :
 		log_fatal("{}", vbo_result.error());
 		LICH_ABORT();
 	}
+
 	auto vertex_buffer = std::move(vbo_result.value());
-	log_debug("Foo");
 	vertex_buffer->set_layout(
 		_shader,
 		Buffer_Layout{
@@ -82,7 +84,6 @@ Render_Layer::Render_Layer(float aspect_ratio) :
 			{Shader_Data_Type::Float3, "color"}
 		}
 	);
-	log_debug("Bar");
 	_vertex_array->add_vertex_buffer(std::move(vertex_buffer));
 	
 	auto ebo_result = Index_Buffer::create(indices_, index_count_);
@@ -125,10 +126,33 @@ void Render_Layer::update([[maybe_unused]] lich::Timestep timestep) {
 		float angle = _camera.rotation() + rotation * degrees_per_frame;
 		_camera.set_rotation(angle);
 	}
+
+	glm::vec3 square_direction{};
+	if (_keys[Left])  square_direction.x -= 1.0f;
+	if (_keys[Right]) square_direction.x += 1.0f;
+	if (_keys[Up])    square_direction.y += 1.0f;
+	if (_keys[Down])  square_direction.y -= 1.0f;
+
+	if (square_direction != glm::vec3{0.0f}) {
+		float square_speed = 2.0f * timestep.seconds();
+		_square_pos += glm::normalize(square_direction) * square_speed;
+	}
+	glm::mat4 square_transform = glm::translate(glm::mat4(1.0f), _square_pos);
 	
-	_shader->bind();
-	_shader->upload_uniform("u_view_projection", _camera.view_projection());
-	lich::Renderer::submit(_vertex_array);
+	lich::Renderer::submit(_camera);
+	lich::Renderer::submit(_shader, _vertex_array, square_transform);
+
+	glm::mat4 transform{1.0f};
+	for (int i = 0; i < 20; ++i) {
+		if (i % 2 == 0) {
+			transform = glm::scale(transform, glm::vec3{0.75f, 0.5f, 1.0f});
+		} else {
+			transform = glm::scale(transform, glm::vec3{0.5f, 1.0f, 1.0f});
+		}
+		transform = glm::translate(transform, glm::vec3{1.0f, 1.0f, 0.0f});
+
+		lich::Renderer::submit(_shader, _vertex_array, transform);
+	}
 }
 
 void Render_Layer::handle(lich::Event &event) {
@@ -146,12 +170,16 @@ void Render_Layer::handle(lich::Event &event) {
 		[this] (const auto &press) -> bool {
 			using namespace lich;
 			if (press.repeat != 0) return false;
-			if (press.code == Key_Code::W) _keys[W] = true;
-			if (press.code == Key_Code::A) _keys[A] = true;
-			if (press.code == Key_Code::S) _keys[S] = true;
-			if (press.code == Key_Code::D) _keys[D] = true;
-			if (press.code == Key_Code::E) _keys[E] = true;
-			if (press.code == Key_Code::Q) _keys[Q] = true;
+			if (press.code == Key_Code::W)     _keys[W]     = true;
+			if (press.code == Key_Code::A)     _keys[A]     = true;
+			if (press.code == Key_Code::S)     _keys[S]     = true;
+			if (press.code == Key_Code::D)     _keys[D]     = true;
+			if (press.code == Key_Code::E)     _keys[E]     = true;
+			if (press.code == Key_Code::Q)     _keys[Q]     = true;
+			if (press.code == Key_Code::Left)  _keys[Left]  = true;
+			if (press.code == Key_Code::Right) _keys[Right] = true;
+			if (press.code == Key_Code::Up)    _keys[Up]    = true;
+			if (press.code == Key_Code::Down)  _keys[Down]  = true;
 			return false;
 		}
 	);
@@ -159,12 +187,16 @@ void Render_Layer::handle(lich::Event &event) {
 	dispatcher.handle<lich::Key_Release_Event>(
 		[this] (const auto &release) -> bool {
 			using namespace lich;
-			if (release.code == Key_Code::W) _keys[W] = false;
-			if (release.code == Key_Code::A) _keys[A] = false;
-			if (release.code == Key_Code::S) _keys[S] = false;
-			if (release.code == Key_Code::D) _keys[D] = false;
-			if (release.code == Key_Code::E) _keys[E] = false;
-			if (release.code == Key_Code::Q) _keys[Q] = false;
+			if (release.code == Key_Code::W) _keys[W]         = false;
+			if (release.code == Key_Code::A) _keys[A]         = false;
+			if (release.code == Key_Code::S) _keys[S]         = false;
+			if (release.code == Key_Code::D) _keys[D]         = false;
+			if (release.code == Key_Code::E) _keys[E]         = false;
+			if (release.code == Key_Code::Q) _keys[Q]         = false;
+			if (release.code == Key_Code::Left)  _keys[Left]  = false;
+			if (release.code == Key_Code::Right) _keys[Right] = false;
+			if (release.code == Key_Code::Up)    _keys[Up]    = false;
+			if (release.code == Key_Code::Down)  _keys[Down]  = false;
 			return false;
 		}
 	);

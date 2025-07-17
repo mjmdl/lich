@@ -23,7 +23,19 @@ void Render_Command::draw_indexed(const std::unique_ptr<Vertex_Array> &vertex_ar
 void Renderer::begin_scene() {}
 void Renderer::end_scene() {}
 
-void Renderer::submit(const std::unique_ptr<Vertex_Array> &vertex_array) {
+void Renderer::submit(const lich::Orthographic_Camera_2d &camera) {
+	scene_data_.view_projection = camera.view_projection();
+}
+
+void Renderer::submit(
+	const std::unique_ptr<Shader> &shader,
+	const std::unique_ptr<Vertex_Array> &vertex_array,
+	const glm::mat4 &transform
+) {
+	shader->bind();
+	shader->upload_uniform("u_view_projection", scene_data_.view_projection);
+	shader->upload_uniform("u_transform", transform);
+	
 	vertex_array->bind();
 	Render_Command::draw_indexed(vertex_array);
 }
